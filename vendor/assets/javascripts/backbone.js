@@ -1224,10 +1224,10 @@
   // Create the default Backbone.history.
   Backbone.history = new History;
 
-  // Backbone.View
+  // Backbone.view
   // -------------
 
-  // Creating a Backbone.View creates its initial element outside of the DOM,
+  // Creating a Backbone.view creates its initial element outside of the DOM,
   // if an existing element is not provided...
   var View = Backbone.View = function(options) {
     this.cid = _.uniqueId('view');
@@ -1243,10 +1243,10 @@
   // List of view options to be merged as properties.
   var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 
-  // Set up all inheritable **Backbone.View** properties and methods.
+  // Set up all inheritable **Backbone.view** properties and methods.
   _.extend(View.prototype, Events, {
 
-    // The default `tagName` of a View's element is `"div"`.
+    // The default `tagName` of a view's element is `"div"`.
     tagName: 'div',
 
     // jQuery delegate for element lookup, scoped to DOM elements within the
@@ -1325,7 +1325,7 @@
       this.$el.off('.delegateEvents' + this.cid);
     },
 
-    // Performs the initial configuration of a View with a set of options.
+    // Performs the initial configuration of a view with a set of options.
     // Keys with special meaning *(model, collection, id, className)*, are
     // attached directly to the view.
     _configure: function(options) {
@@ -1334,7 +1334,7 @@
       this.options = options;
     },
 
-    // Ensure that the View has a DOM element to render into.
+    // Ensure that the view has a DOM element to render into.
     // If `this.el` is a string, pass it through `$()`, take the first
     // matching element, and re-assign it to `el`. Otherwise, create
     // an element from the `id`, `className` and `tagName` properties.

@@ -1,0 +1,19 @@
+<tr class="">
+    <td><%= data.name %></td>
+    <td><%= data.title%></td>
+    <td>
+    </td>
+    <td>
+        <div class="dropdown">
+            <a class=" btn btn-mini" data-toggle="dropdown" href="#">
+                <b class="caret"></b></a>
+                <ul class="dropdown-menu pull-right"  aria-labelledby="dLabel">
+                    <li ><a class="js-open" data-href="admin/groups/<%=data.id%>/permissions"  title="Роли">Роли</a></li>
+                    <li class="divider"></li>
+                    <li><a href="" class="js-delete" title="Удалить позицию">Удалить</a></li>
+                </ul>
+        </div>
+
+
+    </td>
+</tr>
