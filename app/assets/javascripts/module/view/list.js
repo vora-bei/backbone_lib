@@ -279,5 +279,55 @@ TiragSales.Views.list_with_select={
 }
 
 
+TiragSales.Views.list_with_relational = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+    .extend({
+        initialize: function(options){
+            this.proto(options);
+        },
+        render: function() {
+            this._render('.js-list',this.collection,this._item,'list');
+            return this;
+        },
+
+        _item : Backbone.View
+            .extend(TiragSales.Views.init)
+            .extend(TiragSales.Views.item)
+            .extend(TiragSales.Views.list)
+            .extend({
+                c_line : [],
+                initialize: function(options){
+                    this.proto(options)
+                },
+                render: function() {
+                    if(this.model!=null){
+                        var contract_lines=this.model.get_relational('contract_lines')
+                        this._render_item();
+                        this._render('.js-contract-line',contract_lines,this._item,'paym_assign');
+                        this.status();
+                    }
+                    return this;
+                },
+
+                _item : Backbone.View
+                    .extend(TiragSales.Views.init)
+                    .extend(TiragSales.Views.item)
+                    .extend({
+
+                        tagName:  "tr",
+
+                        initialize: function(options){
+                            this.proto(options);
+                        }
+                    })
+
+            })
+
+    });
+
+
+
+
 
 
