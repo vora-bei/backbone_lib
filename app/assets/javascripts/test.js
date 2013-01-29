@@ -1,3 +1,10 @@
+/**
+ * Created with JetBrains RubyMine.
+ * User: aravak
+ * Date: 29.01.13
+ * Time: 20:22
+ * To change this template use File | Settings | File Templates.
+ */
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //
@@ -17,12 +24,8 @@
 //= require_tree ../templates
 //= require_tree ./module
 //= require_tree ./Backbone
-// side bar
+//=require qunit
 
-var $window = $(window)
-$('.bs-docs-sidenav').affix({
-    offset: {
-        top: function () { return $window.width() <= 980 ? 290 : 210 },
-        bottom: 270
-    }
-})
+test( "hello test", function() {
+    ok( 1 == "1", "Passed!" );
+});

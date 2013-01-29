@@ -1,7 +1,7 @@
 BackboneLib::Application.routes.draw do
   resources :users
   root :to => "application#index"
-
+  match 'application/test' => "application#test"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

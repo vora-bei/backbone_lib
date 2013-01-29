@@ -4,4 +4,7 @@ class ApplicationController < ActionController::Base
   def index
 
   end
+  def test
+    render :layout => 'qunit'
+  end
 end
