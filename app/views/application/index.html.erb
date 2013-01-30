@@ -37,7 +37,7 @@
 </div>
 <header id="overview" class="jumbotron subhead">
   <div class="container">
-    <h1>User Interfaces</h1>
+    <h1>Backbone list lib</h1>
     <p class="lead">Библиотека пользовательских компонент для для фреймворка Backbone.</p>
   </div>
 </header>
@@ -68,202 +68,57 @@
         <div class="page-header">
           <h1>О проекте</h1>
         </div>
-        fdvsdvdfvd
-        dfvdfv
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
+        <p>Данная библиотека была разработана для работы со списками. Она реализована на  основе  современного
+        web-инструментария  Backbone.js , Underscore.js, Jquery.js, JQuery.UI.js,
+        Twitter.bootstrap.js
+        <p>
       </section>
       <section id="base">
         <div class="page-header">
-          <h1>Button groups</h1>
+          <h1>Базовый список</h1>
         </div>
-        dfvdfvfdvdfvdfv
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
-        dfvdfvfdv
-        <br>
-        edfgefdg
-        <br>
+        <p>Список – элемент интерфейса базовый для вкладок, на которых требуется
+          отображение большого количества однотипной информации. Списки наследуется
+          от Backbone.View и при инициализации получают ссылку на экземпляр класса
+          Backbone.Collection и на экземпляр класса Backbone.View_item (класс
+          представления элемента списка). Списки строятся на основе информации с сервера,
+          переданной в json формате. Внешний вид элементов списка получается с
+          помощью шаблона элемента списка. Данные сервера сохраняются в классе,
+          наследуемом от Backbone.Collection.
+        </p>
+        <pre>
+TiragSales.Views.Users = Backbone.View.extend(TiragSales.Views.list)
+                    .extend(TiragSales.Views.init).extend({
+    initialize:function () {
+        this.proto();
+        this.collection.on('reset', this.render, this);
+        this.collection.on("sync", this.render, this);
+        this.collection.fetch();
+    },
+    render:function () {
+        this._render('.js-list', this.collection, this._item, 'list');
+        return this;
+    },
+
+    _item:Backbone.View
+        .extend(TiragSales.Views.item)
+        .extend(TiragSales.Views.init)
+        .extend({
+
+            template:JST['sales/adm/user/item'],
+            template_not_item:JST['sales/adm/user/not_item'],
+            tagName:"tr",
+
+            initialize:function (options) {
+                this.proto(options);
+                this.model.on("sync", this.render, this);
+            }
+
+        })
+
+
+});
+        </pre>
       </section>
       <section id="mixin">
         <div class="page-header">

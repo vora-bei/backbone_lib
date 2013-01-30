@@ -1,4 +1,4 @@
-TiragSales.Models.Basic = Backbone.Model.extend({
+Backbone.ModelBasic = Backbone.Model.extend({
     nameModel : 'model',
     get_relational: function (name){
         if(_.isEmpty(this.collection[name]))

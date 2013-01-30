@@ -1,32 +1,20 @@
-TiragSales.Views.Users = Backbone.View.extend(TiragSales.Views.list).extend(TiragSales.Views.init).extend({
-    initialize: function() {
+TiragSales.Views.Users = Backbone.ViewList.extend({
+    initialize:function () {
         this.proto();
-        this.collection.on('reset', this.render, this);
-        this.collection.on("sync", this.render,this);
-        this.collection.fetch();
     },
-    render: function() {
-        this._render('.js-list',this.collection,this._item,'list');
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-
-    _item:Backbone.View
-        .extend(TiragSales.Views.item)
-        .extend(TiragSales.Views.init)
-        .extend({
-
+    _item:Backbone.ViewItem.extend({
             template:JST['sales/adm/user/item'],
             template_not_item:JST['sales/adm/user/not_item'],
             tagName:"tr",
-
             initialize:function (options) {
                 this.proto(options);
-                this.model.on("sync", this.render,this);
+                this.model.on("sync", this.render, this);
             }
-
         })
-
-
 });
 
 TiragSales.Views.Drag_Users=TiragSales.Views.Users

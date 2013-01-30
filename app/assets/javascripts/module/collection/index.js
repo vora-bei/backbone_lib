@@ -1,4 +1,4 @@
-TiragSales.Collections.Basic = Backbone.Collection.extend({
+Backbone.CollectionBasic = Backbone.Collection.extend({
     filter: {},
     category : '',
     initialize: function(models,options){

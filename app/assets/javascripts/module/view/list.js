@@ -1,5 +1,11 @@
 TiragSales.Views.init = {
 
+    _initialize:function (options) {
+        this.collection.on('reset', this.render, this)
+            .on("sync", this.render, this)
+            .fetch();
+    },
+
     proto : function(options){
         options || (options={})
         this.proto_events();
@@ -186,8 +192,6 @@ TiragSales.Views.list= {
     }
 }
 
-
-
 TiragSales.Views.list_with_drag = {
 
 
@@ -330,4 +334,5 @@ TiragSales.Views.list_with_relational = Backbone.View
 
 
 
-
+Backbone.ViewList = Backbone.View.extend(TiragSales.Views.list).extend(TiragSales.Views.init)
+Backbone.ViewItem = Backbone.View.extend(TiragSales.Views.item).extend(TiragSales.Views.init)
