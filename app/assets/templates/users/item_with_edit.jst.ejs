@@ -1,14 +1,3 @@
-           <td><%=data.name%></td>
-           <td class="center"><input type="text" class="js-count input-amount" size="3" value="<%=data.volume%>" title="Количество товара"></td>
-           <td class="center">
-                <%if(data.has_editable_price){%>
-                <input type="text" class="js-count_price input-amount" size="8" value="<%=data.item_final_price%>" title="Цена">
-                <%}else{%>
-                    <%=data.item_final_price%>
-                <%};%>
-           </td>
-           <td class="center"><%=data.final_nds%></td>
-           <td class="center">
-                <%=data.discount_value%><%if(data.discount_is_percent){%>%<br><%}%><a class="tip" href="#" title="<%=data.discount_comment%>" ><i class="icon-eye-open"></i></a></td>
-           <td class="center"><%=data.final_price%></td>
-           <td><a href=" " class="js-delete" title="Удалить позицию"><i class="icon-remove js-delete"></i></a></td>
+<tr>
+  <td class="center"><input type="text" value="<%=data.name%>" title="Имя"></td>
+</tr>

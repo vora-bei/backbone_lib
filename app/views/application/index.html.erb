@@ -547,6 +547,13 @@
           edfgefdg
           <br>
         </div>
+        <script type="text/javascript">
+        $(function(){
+        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+        new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
+        })
+        </script>
+        <table id="list_2"></table>
       </section>
       <section id="mixin3">
         <div class="page-header">
@@ -814,6 +821,16 @@
           edfgefdg
           <br>
         </div>
+        <script type="text/javascript">
+            $(function(){
+                var collection = new TiragSales.Collections.Users([{name : 'Kita'},{name : 'Kita'},{name : 'Kita'}],{url : 'users'})
+                new TiragSales.Views.UsersWithEdit({el: $('#list_3').get(0), collection : collection})
+            })
+
+        </script>
+        <table id="list_3">
+
+        </table>
       </section>
       <section id="mixin6">
         <div class="page-header">

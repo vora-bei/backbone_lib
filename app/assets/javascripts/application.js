@@ -16,7 +16,10 @@
 //= require_tree ../../../vendor/assets/javascripts
 //= require_tree ../templates
 //= require_tree ./module
-//= require_tree ./Backbone
+//= require_tree ./Backbone/model
+//= require_tree ./Backbone/collection
+//= require_tree ./Backbone/view
+//= require_tree ./Backbone/route
 // side bar
 
 var $window = $(window)

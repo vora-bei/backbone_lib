@@ -7,14 +7,52 @@ TiragSales.Views.Users = Backbone.ViewList.extend({
         return this;
     },
     _item:Backbone.ViewItem.extend({
-            template:JST['sales/adm/user/item'],
-            template_not_item:JST['sales/adm/user/not_item'],
+            template:JST['users/item'],
+            template_not_item:JST['users/not_item'],
             tagName:"tr",
             initialize:function (options) {
                 this.proto(options);
             }
         })
 });
+
+TiragSales.Views.UsersWithDelete = Backbone.ViewListWithDelete.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item_with_delete'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+
+TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item_with_edit'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+
+
  /*
 TiragSales.Views.Drag_Users=TiragSales.Views.Users
     .extend(TiragSales.Views.drag_list_with_item).extend({

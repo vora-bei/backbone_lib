@@ -16,9 +16,6 @@ Backbone.CollectionBasic = Backbone.Collection.extend({
     },
     url_base : "",
     model: TiragSales.Models.Basic,
-    url_delete: function(id){
-        return  this.url_base+'/'+id;
-    },
     url: function(){
         var url;
 

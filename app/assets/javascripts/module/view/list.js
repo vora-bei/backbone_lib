@@ -89,8 +89,9 @@ TiragSales.Views.item_with_delete = {
     },
 
     delete:function () {
-
-        this.model.destroy({url:this.model.collection.url_delete(this.model.get('id'))});
+        if(this.model['url_for_delete'])
+        var url= $.proxy(this.model['url_for_delete'],this.model);
+        url ? this.model.destroy({url :url()}) : this.model.destroy() ;
         this.model = null;
         return false;
     }
@@ -146,13 +147,11 @@ TiragSales.Views.edit_item={
         this.render();
     }
 }
-
 TiragSales.Views.list= {
 
     _initialize:function (options) {
         this.collection.on('reset', this.render, this)
-            .on("sync", this.render, this)
-            .fetch();
+            .on("sync", this.render, this);
     },
 
     list : [],
@@ -175,18 +174,17 @@ TiragSales.Views.list= {
             coll.each(function(num,i){
                 var    view = new item({model: num, self : this});
                 this[list][i]=view;
-                this.$(elem).append(view.render().el);
+                $(elem,this.$el).append(view.render().el);
             },this);
         else
         {
 
-            var view = new item({model: new TiragSales.Models.orgs()});
-            this.$(elem).append(view.render_not_item().el);
+            var view = new item({model: new coll.model()});
+            $(elem,this.$el).append(view.render_not_item().el);
             this[list][0]=view;
         }
     }
 }
-
 TiragSales.Views.list_with_drag = {
 
 
@@ -213,7 +211,6 @@ TiragSales.Views.list_with_drag = {
     }
 
 }
-
 TiragSales.Views.list_with_drop = {
     events: {
         'save-from' : 'save_from'
@@ -238,19 +235,16 @@ TiragSales.Views.list_with_drop = {
     }
 
 }
-
 TiragSales.Views.list_with_edit = {
     _initialize: function(options){
         this.extend_in('_item', TiragSales.Views.edit_item)
     }
 }
-
 TiragSales.Views.list_with_delete = {
     _initialize:function (options) {
-        this.extend_in('_item', TiragSales.Views.delete_item)
+        this.extend_in('_item', TiragSales.Views.item_with_delete)
     }
 }
-
 TiragSales.Views.list_with_select={
     _initialize: function(options) {
         this.extend_in('_item',{
@@ -329,5 +323,60 @@ TiragSales.Views.list_with_relational = Backbone.View
 
 
 
-Backbone.ViewList = Backbone.View.extend(TiragSales.Views.list).extend(TiragSales.Views.init)
-Backbone.ViewItem = Backbone.View.extend(TiragSales.Views.item).extend(TiragSales.Views.init)
+//Класс списка
+Backbone.ViewList = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+
+//Класс элемента списка
+Backbone.ViewItem = Backbone.View
+    .extend(TiragSales.Views.item)
+    .extend(TiragSales.Views.init)
+
+//Класс элемента списка с подсписком
+Backbone.ViewItemWithRelational = Backbone.View
+    .extend(TiragSales.Views.item)
+    .extend(TiragSales.Views.init)
+    .extend(TiragSales.Views.list)
+    .extend({
+        render: function() {
+            if(this.model!=null){
+                var _lines=this.model.get_relational('_lines')
+                this._render_item();
+                this._render('.js-contract-line',contract_lines,this._item,'_lines');
+                this.status();
+            }
+            return this;
+        }
+    })
+
+//Класс списка c Drag элементами
+Backbone.ViewListWithDrag = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+    .extend(TiragSales.Views.list_with_drag)
+
+//Класс списка c Drop элементами
+Backbone.ViewListWithDrop = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+    .extend(TiragSales.Views.list_with_drop)
+
+//Класс списка c редактируеммыми элементами
+Backbone.ViewListWithEdit = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+    .extend(TiragSales.Views.list_with_edit)
+
+//Класс списка c удаляемыми элементами
+Backbone.ViewListWithDelete = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+    .extend(TiragSales.Views.list_with_delete)
+
+//Класс списка c выбираемыми элементами
+Backbone.ViewListWithSelect = Backbone.View
+    .extend(TiragSales.Views.list)
+    .extend(TiragSales.Views.init)
+    .extend(TiragSales.Views.list_with_select)
+
