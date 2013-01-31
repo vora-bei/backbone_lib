@@ -87,38 +87,18 @@
           наследуемом от Backbone.Collection.
         </p>
         <pre>
-TiragSales.Views.Users = Backbone.View.extend(TiragSales.Views.list)
-                    .extend(TiragSales.Views.init).extend({
-    initialize:function () {
-        this.proto();
-        this.collection.on('reset', this.render, this);
-        this.collection.on("sync", this.render, this);
-        this.collection.fetch();
-    },
-    render:function () {
-        this._render('.js-list', this.collection, this._item, 'list');
-        return this;
-    },
 
-    _item:Backbone.View
-        .extend(TiragSales.Views.item)
-        .extend(TiragSales.Views.init)
-        .extend({
-
-            template:JST['sales/adm/user/item'],
-            template_not_item:JST['sales/adm/user/not_item'],
-            tagName:"tr",
-
-            initialize:function (options) {
-                this.proto(options);
-                this.model.on("sync", this.render, this);
-            }
-
-        })
-
-
-});
         </pre>
+        <script type="text/javascript">
+            $(function(){
+                var collection = new TiragSales.Collections.Users([{name : 'Kita'},{name : 'Kita'},{name : 'Kita'}],{url : 'users'})
+                new TiragSales.Views.Users({el: $('#list_1').get(0), collection : collection})
+            })
+
+        </script>
+        <table id="list_1">
+
+        </table>
       </section>
       <section id="mixin">
         <div class="page-header">

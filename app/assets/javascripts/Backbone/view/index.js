@@ -12,11 +12,10 @@ TiragSales.Views.Users = Backbone.ViewList.extend({
             tagName:"tr",
             initialize:function (options) {
                 this.proto(options);
-                this.model.on("sync", this.render, this);
             }
         })
 });
-
+ /*
 TiragSales.Views.Drag_Users=TiragSales.Views.Users
     .extend(TiragSales.Views.drag_list_with_item).extend({
         initialize: function(options) {
@@ -204,3 +203,4 @@ TiragSales.Views.Drop_Permissions=TiragSales.Views.Permissions
 //            this.extend_in('_item',{template:JST['sales/adm/permission/main_item']})
 //        }
 //    })
+*/

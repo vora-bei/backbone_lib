@@ -1,11 +1,4 @@
 TiragSales.Views.init = {
-
-    _initialize:function (options) {
-        this.collection.on('reset', this.render, this)
-            .on("sync", this.render, this)
-            .fetch();
-    },
-
     proto : function(options){
         options || (options={})
         this.proto_events();
@@ -156,8 +149,10 @@ TiragSales.Views.edit_item={
 
 TiragSales.Views.list= {
 
-    _initialize : function(options){
-
+    _initialize:function (options) {
+        this.collection.on('reset', this.render, this)
+            .on("sync", this.render, this)
+            .fetch();
     },
 
     list : [],
