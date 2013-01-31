@@ -133,17 +133,16 @@ TiragSales.Views.edit_item={
 
     set_value_to_enter: function(a){
         if(a.which==13)
-            this.set_(a)
+            this.set_value(a)
     },
     set_value: function(a){
         var elem = $(a.currentTarget),
-            value = parseFloat(elem.val()),
-            name= elem.attr('name');
-        if(value<1||_.isNaN(value) ){
-            value=1.0;
-        }
-        var url= $.proxy(this.model['url_for_update_'+name],this.model);
-        this.model.save({item_final_price : value},{url : url()})
+            value = elem.val(),
+            name=elem.attr('name');
+        var url= this.model['url_for_update_'+name] ? $.proxy(this.model['url_for_update_'+name],this.model) : $.proxy(this.model.url,this.model);
+        var data={};
+        data[name]=value;
+        this.model.save(data,{url : url()})
         this.render();
     }
 }
