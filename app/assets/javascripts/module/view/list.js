@@ -1,6 +1,6 @@
 TiragSales.Views.init = {
     proto : function(options){
-        options || (options={})
+        options || (options=this.options) || (options={})
         this.proto_events();
         this.proto_init(options);
     },
@@ -30,8 +30,6 @@ TiragSales.Views.init = {
 }
 TiragSales.Views.item = {
 
-    template:JST['sales/payms/assign_payms'],
-    template_not_item:JST['sales/payms/not/item_payms'],
     tagName:"tr",
 
     _initialize:function (options) {
@@ -138,7 +136,9 @@ TiragSales.Views.edit_item={
     set_value: function(a){
         var elem = $(a.currentTarget),
             value = elem.val(),
-            name=elem.attr('name');
+            name= elem.attr('name');
+        if(!name)
+            throw new Error('у редактируемого элемента должно быть свойство name');
         var url= this.model['url_for_update_'+name] ? $.proxy(this.model['url_for_update_'+name],this.model) : $.proxy(this.model.url,this.model);
         var data={};
         data[name]=value;
@@ -187,12 +187,12 @@ TiragSales.Views.list= {
 TiragSales.Views.list_with_drag = {
 
 
-    sortable:function(){
-        this.$( ".js-list" ).sortable({
-            connectWith: ".js-list",
-            appendTo: '#page-flow',
+    sortable:function(options){
+        this.$el.sortable({
+            connectWith: options.connectWith || ".js-list",
+            appendTo: 'body',
             helper: 'clone',
-            items: 'tr',
+            items: options.items || 'tr',
             cancel :'.not_draggable'
         });
     },
@@ -200,7 +200,7 @@ TiragSales.Views.list_with_drag = {
 
 
     _initialize: function(options) {
-        this.sortable();
+        this.sortable(options);
         if(options.drag_item){
             this[options.drag_item]=this[property].extend(TiragSales.Views.drag_item)
         }else{
@@ -210,14 +210,15 @@ TiragSales.Views.list_with_drag = {
     }
 
 }
-TiragSales.Views.list_with_drop = {
+    TiragSales.Views.list_with_drop = {
     events: {
         'save-from' : 'save_from'
     },
 
-    sortable: function(){
-        this.$( ".js-list" ).sortable({
-            items: 'tr.selectable',
+    sortable: function(options){
+        this.$el.sortable({
+            items: options.items || 'tr',
+            cancel :'.not_draggable',
             receive: function(event, ui){
                 ui.item.trigger('save_to',this)
             }
@@ -225,11 +226,15 @@ TiragSales.Views.list_with_drop = {
     },
 
     save_from : function(a,model){
-        this.collection.create(model,{at: 0, url : this.collection.url_update()});
+        if(this.collection['url_create'])
+             var url=$.proxy(this.collection['url_create'],this.collection)
+        else
+             var url=$.proxy(this.collection.url,this.collection);
+        this.collection.create(model,{at: 0, url : url()});
     },
 
     _initialize: function(options) {
-        this.sortable();
+        this.sortable(options);
 
     }
 

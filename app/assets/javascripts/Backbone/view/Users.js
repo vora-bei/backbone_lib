@@ -52,7 +52,58 @@ TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
     })
 });
 
+TiragSales.Views.UsersWithDrop = Backbone.ViewListWithDrop.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item_with_drop'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+TiragSales.Views.UsersWithDrag = Backbone.ViewListWithDrag.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item_with_drag'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
 
+TiragSales.Views.UsersWithSelect = Backbone.ViewListWithSelect.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item_with_select'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
  /*
 TiragSales.Views.Drag_Users=TiragSales.Views.Users
     .extend(TiragSales.Views.drag_list_with_item).extend({

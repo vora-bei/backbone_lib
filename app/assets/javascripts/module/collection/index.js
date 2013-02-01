@@ -16,6 +16,11 @@ Backbone.CollectionBasic = Backbone.Collection.extend({
     },
     url_base : "",
     model: TiragSales.Models.Basic,
+    /*
+    url_create: function(){
+     определив ее переопределяется урл для создания нового элемента списка
+    },
+    */
     url: function(){
         var url;
 
