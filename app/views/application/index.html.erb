@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
@@ -328,10 +329,12 @@ TiragSales.Views.UsersWithSelect = Backbone.ViewListWithEdit.extend({
             $(function(){
                 var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
                 new TiragSales.Views.UsersWithSelect({el: $('#list_6').get(0), collection : collection})
+                new Backbone.View.FilterDate({el: $('#item_6').get(0),model: {name:'date_to',value:''}, collection: collection})
             })
 
         </script>
         <h3>Пример</h3>
+        <div id="item_6"></div>
         <table class="table-bordered table" id="list_6">
 
         </table>

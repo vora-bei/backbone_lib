@@ -1,5 +1,14 @@
 Backbone.CollectionBasic = Backbone.Collection.extend({
     filter: {},
+    getFilter: function(name){
+        return filter[name];
+    },
+    setFilter: function(name, value){
+       this.filter[name]=value;
+       return this;
+    },
+
+
     category : '',
     initialize: function(models,options){
         this.filter= {};
@@ -37,7 +46,9 @@ Backbone.CollectionBasic = Backbone.Collection.extend({
             url=this.url_base+'?';
         }
         url+=this.category;
-
+        var last=url.charAt(url.length-1);
+        if(last==='?'|| last==='&')
+            url=url.slice(0,-1)
         return url;
     }
 

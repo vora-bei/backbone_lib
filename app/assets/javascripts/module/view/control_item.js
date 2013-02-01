@@ -1,4 +1,4 @@
-TiragSales.Views.add_item = Backbone.View.extend({
+Backbone.View.AddItem = Backbone.View.extend({
 
     events: {
         "click .js-add-button": 'add',
@@ -77,55 +77,7 @@ TiragSales.Views.add_item = Backbone.View.extend({
 
 })
 
-
-
-TiragSales.Views.date_filter = Backbone.View.extend(TiragSales.Views.init).extend({
-    initialize : function() {
-        var monthNames= ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-        var monthNamesShort = monthNames; //["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-        var dayNamesMin=  ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-        var $this=this;
-        this.$(".date_from, .date_to" ).datepicker({
-            dateFormat:'dd.mm.yy',
-            monthNames:monthNames,
-            dayNamesMin:dayNamesMin,
-            changeMonth: true,
-            changeYear: true,
-            showOtherMonths: true,
-            selectOtherMonths: true,
-            monthNamesShort:monthNamesShort,
-            onSelect: function(dateText, inst) {
-                if (!_.isEmpty($(this).val()))
-                    $(this).trigger('blur')
-                return true
-            }
-
-        });
-
-        this.$(".date_from,.date_to" ).next().click(function(){
-            $(this).prev().datepicker("show");
-
-        })
-
-
-    },
-    events: {
-        "blur .js-filter": 'filter'
-    },
-    filter: function(a){
-        var data= {};
-        var val= $(a.currentTarget);
-        this.collection.filter[val.attr('name')]=val.val();
-        var $context=this;
-        this.collection.fetch();
-        return true
-    }
-
-
-});
-
-
-TiragSales.Views.Filter = Backbone.View.extend(TiragSales.Views.init).extend({
+Backbone.View.Filter = Backbone.View.extend(TiragSales.Views.init).extend({
     template: JST['sales/module/filter'],
     timer : 0,
     events: {
@@ -165,7 +117,68 @@ TiragSales.Views.Filter = Backbone.View.extend(TiragSales.Views.init).extend({
 });
 
 
-TiragSales.Views.checked = Backbone.View.extend(TiragSales.Views.init).extend({
+Backbone.View.FilterDate = Backbone.View.extend(TiragSales.Views.init).extend({
+    monthNames : ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+    dayNamesMin:  ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+    template : JST['module/date_picker'],
+    events :{
+        "select .js-filter": 'filter',
+        "blur .js-filter": 'filter',
+        'click .js-filter-button' : 'filterButton'
+    },
+    render:function () {
+            var item = this.options.model || {};
+            var template = $(this.template({data:item}))
+            this.copyAttr(template, this.$el)
+            this.$el.html(template.html())
+            return this;
+    },
+    copyAttr:function (from, to) {
+        var attributes = from.get(0).attributes
+        var attr = {};
+        _.each(attributes, function (item) {
+            attr[item.nodeName] = item.value;
+        }, this)
+        to.attr(attr)
+    },
+    initialize : function() {
+        this.render();
+        this.$(".js-filter").datepicker({
+            dateFormat:'dd.mm.yy',
+            monthNames:this.monthNames,
+            dayNamesMin:this.dayNamesMin,
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            onSelect : function(dateText, inst) {$(this).trigger('select'); },
+            monthNamesShort:this.monthNames
+        });
+
+
+    },
+    filterButton : function(){
+        this.$('.js-filter').trigger('focus');
+    },
+    filter: function(a){
+        var currentTarget= $(a.currentTarget),
+            val=currentTarget.val();
+        if (val&&this.options.value!==val){
+            this.options.value=val;
+            this.collection
+                .setFilter(currentTarget.attr('name'), val)
+                .fetch();
+        }
+        return true
+    }
+
+
+});
+
+
+
+
+Backbone.View.Checked = Backbone.View.extend(TiragSales.Views.init).extend({
     dog_type: '',
     events: {
         "click .js-btn-info": 'checked'
@@ -228,7 +241,65 @@ TiragSales.Views.checked = Backbone.View.extend(TiragSales.Views.init).extend({
 
 });
 
-TiragSales.Views.FormToJson = Backbone.View.extend({
+Backbone.View.Modal = Backbone.View.extend({
+    template:JST['sales/modalWindow/index_form'],
+    $currentTarget:'',
+    initialize:function () {
+
+    },
+    events:{
+        'data':'initShow',
+        'click .ok':'submit'
+
+    },
+    submit:function () {
+        var $this,
+            license={};
+        this.$('form').find('input, textarea').each(function (i) {
+            $this = $(this);
+            license[$this.attr('name')] = $this.val();
+        })
+        var self=this;
+        $.ajax({
+            dataType:'json',
+            data : license,
+            url:"/api/sales/licenses/"+license.id+"/convert_to_multiple",
+            type :'POST',
+            success : $.proxy(function (data) {
+                this.trigger('click')
+                self.options.api.reloadPage();
+            }, this.$currentTarget),
+            error : $.proxy(function (a,b,c) {
+                var error = eval('('+a.responseText+')')
+                self.showError(error)
+
+            }, this.$currentTarget)
+        });
+
+    },
+    showError : function(error){
+        var  name ={multiple_count : 'Ошибка'};
+        if(error!=null){
+            var form=this.$('form')
+            $('.error',form).remove()
+            _.each(error,function(val,key){
+                _.each(_.uniq(val),function(value){
+                    name[key]
+                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
+                },this)
+            },this)
+
+        }
+    },
+    initShow:function (e, $current) {
+        this.$currentTarget = $($current);
+        this.$('.modal-body').html(this.template($($current).data('modal')))
+    }
+})
+
+
+
+Backbone.View.FormToJson = Backbone.View.extend({
     events: {
         //"click a" : "selectMenu"
     },
