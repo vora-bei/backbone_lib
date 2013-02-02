@@ -417,11 +417,16 @@ $(function(){
                 var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
                 new TiragSales.Views.UsersWithSelect({el: $('#list_11').get(0), collection : collection})
                 new Backbone.View.FilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
+                new Backbone.View.Filter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
+                new Backbone.View.Checked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+
             })
 
         </script>
         <h3>Пример</h3>
         <div id="item_11"></div>
+        <div id="item_12"></div>
+        <div id="item_13"></div>
         <table class="table-bordered table" id="list_11">
 
         </table>

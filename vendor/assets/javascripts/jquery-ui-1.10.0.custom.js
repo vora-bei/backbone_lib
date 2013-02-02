@@ -6391,7 +6391,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 		}
 		return radios;
 	};
-
+/*
 $.widget( "ui.button", {
 	version: "1.10.0",
 	defaultElement: "<button>",
@@ -6708,7 +6708,7 @@ $.widget( "ui.button", {
 		buttonElement.addClass( buttonClasses.join( " " ) );
 	}
 });
-
+*/
 $.widget( "ui.buttonset", {
 	version: "1.10.0",
 	options: {

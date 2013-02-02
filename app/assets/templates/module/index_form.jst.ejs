@@ -1,0 +1,41 @@
+ <div name="myModal"  class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Изменение типа лицензии на множественную</h3>
+  </div>
+  <div class="modal-body">
+    <div type="text/javascript" style='visibility: hidden;'>
+      new TiragSales.Views.license_modal({el:$('[name="myModal"]', section)[0], api:api})
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    <button class="btn btn-primary ok">Изменить</button>
+  </div>
+</div>
+
+
+<p>Множественная лицензия будет сформированна на:</p>
+<form class="form-horizontal text">
+    <div class="control-group">
+        <label  class="control-label">ИНН</label>
+        <div class="controls">
+            <span class="text"><%=inn%></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label  class="control-label">Артикул</label>
+        <div class="controls">
+            <span class="text"><%=print_name%> </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" >Количество</label>
+        <div class="controls">
+            <input type="hidden" name='id' class="span1" value="<%=id%>">
+            <input type="text" name='count' class="span1">
+        </div>
+    </div>
+
+</form>

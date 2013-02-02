@@ -1,10 +1,13 @@
 Backbone.CollectionBasic = Backbone.Collection.extend({
     filter: {},
     getFilter: function(name){
-        return filter[name];
+        return this.filter[name];
     },
     setFilter: function(name, value){
-       this.filter[name]=value;
+        if(_.isEmpty(value))
+           delete this.filter[name];
+        else
+            this.filter[name]=value;
        return this;
     },
 
@@ -36,8 +39,8 @@ Backbone.CollectionBasic = Backbone.Collection.extend({
         if(!_.isEmpty(this.filter))
         {
             url =  _.reduce(this.filter,function(memo,value,key,list){
-                if(value.indexOf('=')+1)
-                    return memo+value+'&'
+                if(_.isArray(value))
+                    return memo+key+'[]='+value.join('&'+key+'[]=')+'&'
                 return memo+key+'='+value+'&'
             },this.url_base+'?');
         }
@@ -45,7 +48,6 @@ Backbone.CollectionBasic = Backbone.Collection.extend({
         {
             url=this.url_base+'?';
         }
-        url+=this.category;
         var last=url.charAt(url.length-1);
         if(last==='?'|| last==='&')
             url=url.slice(0,-1)
