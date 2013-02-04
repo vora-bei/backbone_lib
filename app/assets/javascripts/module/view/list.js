@@ -881,93 +881,15 @@ Backbone.ViewFormToJson = Backbone.View.extend({
     }
 });
 
-
-Backbone.ViewAddItem = Backbone.View.extend({
-
-    events: {
-        "click .js-add-button": 'add',
-        "click .js-minus-button": 'addClose',
-        "click .js-save-add": 'save'
-    },
-    flag: [],
-    initialize: function() {
-        this.collection.on("sync", this.sync,this);
-        this.collection.on("error", this.error,this);
-    },
-    add: function(a){
-        this.display_add(null,a);
-        return false;
-    },
-
-    display_add  : function(error,a){    //отображение формы ввода с ошибками или без
-        var name={inn: 'Инн', kpp : 'Кпп', name : 'Название' }
-        if(error!=null){
-            var form=this.$('form','.js-add')
-            $('.error',form).remove()
-            _.each(error,function(val,key){
-                _.each(_.uniq(val),function(value){
-                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
-                },this)
-            },this)
-
-        }else{
-            this.$('.js-add-button').addClass('hidden');
-            this.$('.js-minus-button').removeClass('hidden');
-            this.$('.js-add').slideDown("slow");
-            $()
-        }
-    },
-
-    addClose: function(a){
-        $("input",".js-add").val('');
-        this.$('.js-add').slideUp("slow");
-        this.$('.js-add-button').removeClass('hidden');
-        this.$('.js-minus-button').addClass('hidden');
-        return false;
-    },
-
-    sync: function(a,b,c){
-        this.addClose();
-        this.block('save',true);
-    },
-    error: function(a,b,c){
-    },
-    block: function(param,bool){  //флаг на блокирование параметра
-        if(bool!=undefined)
-            this.flag[param]=bool;
-        else
-            return this.flag[param];
-    },
-
-
-
-    save: function(){
-        var form=this.$('.js-add')
-        var data={};
-        $('input',form).add('textarea',form).each(function(){
-            var $this=$(this);
-            data[$this.attr('name')]=$this.val();
-        })
-        this.block('save',false)
-        var $this = this;
-        this.collection.create(data)
-
-
-
-        return false;
-    }
-
-
-})
-
-
 Backbone.ViewModal = Backbone.View.extend({
     template:JST['module/modal'],
     template_body :_.template(''),
     $currentTarget:'',
     initialize:function (options) {
       this.template_body=options.template || this.template_body;
-      this.collection.on('showModal',this.showModal,this);
+      this.collection.on('showModal',this.showModal,this)
+            .on("sync", this.sync,this)
+            .on("error", this.error,this);
       this.render();
     },
     render:function () {
@@ -1006,7 +928,7 @@ Backbone.ViewModal = Backbone.View.extend({
 
 
     },
-    success : function (data) {
+    sync : function (data) {
         this.trigger('click')
         this.$el.modal('close')
     },
@@ -1034,6 +956,100 @@ Backbone.ViewModal = Backbone.View.extend({
         this.$('.modal-body').html(this.template_body({data : model.toJSON()[model.nameModel],model :this.model}))
         this.$el.modal('show')
     }
+})
+
+Backbone.ViewAddItem = Backbone.View.extend({
+    template:JST['module/add_item'],
+    template_body :_.template(''),
+    events: {
+        "click .js-add-button": 'add',
+        "click .js-minus-button": 'addClose',
+        "submit form": 'save'
+    },
+    flag: [],
+    initialize: function(options) {
+        this.template_body=options.template || this.template_body;
+        this.collection.on("sync", this.sync,this)
+                       .on("error", this.error,this);
+        this.render();
+    },
+    render:function () {
+        var item = this.options.model || {};
+        var template = $(this.template({data:item,template_body :this.template_body({data:item})}))
+        this.copyAttr(template, this.$el)
+        this.$el.html(template.html())
+        return this;
+    },
+    copyAttr:function (from, to) {
+        var attributes = from.get(0).attributes
+        var attr = {};
+        _.each(attributes, function (item) {
+            attr[item.nodeName] = item.value;
+        }, this)
+        to.attr(attr)
+    },
+    add: function(a){
+        this.display_add(null,a);
+        return false;
+    },
+
+    display_add  : function(error,a){    //отображение формы ввода с ошибками или без
+        var name={inn: 'Инн', kpp : 'Кпп', name : 'Название' }
+        if(error!=null){
+            var form=this.$('form')
+            $('.error',form).remove()
+            _.each(error,function(val,key){
+                _.each(_.uniq(val),function(value){
+                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
+                },this)
+            },this)
+
+        }else{
+            this.$('.js-add-button').addClass('hidden');
+            this.$('.js-minus-button').removeClass('hidden');
+            this.$('.js-add').slideDown("slow");
+            $()
+        }
+    },
+
+    addClose: function(a){
+        this.$('.js-add').slideUp("slow");
+        this.$('.js-add-button').removeClass('hidden');
+        this.$('.js-minus-button').addClass('hidden');
+        return false;
+    },
+
+    sync: function(a,b,c){
+        this.addClose();
+        this.block('save',true);
+    },
+    error: function(a,b,c){
+    },
+    block: function(param,bool){  //флаг на блокирование параметра
+        if(bool!=undefined)
+            this.flag[param]=bool;
+        else
+            return this.flag[param];
+    },
+
+
+
+    save: function(){
+        var form=this.$('.js-add')
+        var data={};
+        $('input',form).add('textarea',form).each(function(){
+            var $this=$(this);
+            data[$this.attr('name')]=$this.val();
+        })
+        this.block('save',false)
+        this.collection.create(data)
+
+
+
+        return false;
+    }
+
+
 })
 
 

@@ -419,7 +419,8 @@ $(function(){
                 new Backbone.ViewFilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
                 new Backbone.ViewFilter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
                 new Backbone.ViewChecked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
-                new Backbone.ViewModal({el: $('#item_14').get(0),template:JST['users/modal'], collection: collection})
+                new Backbone.ViewModal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
+                new Backbone.ViewAddItem({el: $('#item_15').get(0),model : {title : "Количество"},template:JST['users/add_item_body'], collection: collection})
 
 
             })
@@ -430,6 +431,7 @@ $(function(){
         <div id="item_12"></div>
         <div id="item_13"></div>
         <div id="item_14"></div>
+        <div id="item_15"></div>
         <table class="table-bordered table" id="list_11">
 
         </table>
