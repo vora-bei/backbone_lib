@@ -40,7 +40,7 @@ TiragSales.Views.item = {
     },
     render_not_item:function () {
         if (!_.isEmpty(this.model)) {
-            var item = this.model.toJSON();
+            var item = this.model.toJSON()[this.model.nameModel];
             var template = $(this.template_not_item({data:item}))
             this.copyAttr(template, this.$el)
             this.$el.html(template.html())
@@ -55,7 +55,7 @@ TiragSales.Views.item = {
 
     _render_item:function () {
         if (!_.isEmpty(this.model)) {
-            var item = this.model.toJSON();
+            var item = this.model.toJSON()[this.model.nameModel];
             var template = $(this.template({data:item}))
             this.copyAttr(template, this.$el)
             this.$el.html(template.html())
@@ -89,11 +89,22 @@ TiragSales.Views.item_with_delete = {
     delete:function () {
         if(this.model['url_for_delete'])
         var url= $.proxy(this.model['url_for_delete'],this.model);
-        url ? this.model.destroy({url :url()}) : this.model.destroy() ;
+        url ? this.model.destroy({url :url('item_with_delete')}) : this.model.destroy() ;
         this.model = null;
         return false;
     }
 
+}
+TiragSales.Views.item_with_showModal = {
+    events:{
+        'click':'showModal'
+    },
+    showModal:function () {
+        this.model.collection.trigger('showModal', this.model)
+    },
+    _initialize:function (options) {
+
+    }
 }
 TiragSales.Views.drag_item = {
     events: {
@@ -105,7 +116,7 @@ TiragSales.Views.drag_item = {
             return false
         }
 
-        var model=this.model.toJSON()
+        var model=this.model.toJSON()[this.model.nameModel]
         model[this.model.nameModel+'_id']=model.id;
         delete model.id;
         $(other_list).trigger('save-from',model);
@@ -142,7 +153,7 @@ TiragSales.Views.edit_item={
         var url= this.model['url_for_update_'+name] ? $.proxy(this.model['url_for_update_'+name],this.model) : $.proxy(this.model.url,this.model);
         var data={};
         data[name]=value;
-        this.model.save(data,{url : url()})
+        this.model.save(data,{url : url('item_with_edit')})
         this.render();
     }
 }
@@ -210,7 +221,7 @@ TiragSales.Views.list_with_drag = {
     }
 
 }
-    TiragSales.Views.list_with_drop = {
+TiragSales.Views.list_with_drop = {
     events: {
         'save-from' : 'save_from'
     },
@@ -230,7 +241,7 @@ TiragSales.Views.list_with_drag = {
              var url=$.proxy(this.collection['url_create'],this.collection)
         else
              var url=$.proxy(this.collection.url,this.collection);
-        this.collection.create(model,{at: 0, url : url()});
+        this.collection.create(model,{at: 0, url : url('item_with_drop')});
     },
 
     _initialize: function(options) {
@@ -274,6 +285,12 @@ TiragSales.Views.list_with_select={
         })
     }
 }
+TiragSales.Views.list_with_showModal={
+    _initialize: function(options) {
+        this.extend_in('_item',TiragSales.Views.item_with_showModal)
+    }
+}
+
 
 
 TiragSales.Views.list_with_relational = Backbone.View
@@ -389,7 +406,7 @@ Backbone.ViewListWithSelect = Backbone.View
 * */
 
 
-Backbone.View.Filter = Backbone.View
+Backbone.ViewFilter = Backbone.View
     .extend(TiragSales.Views.init)
     .extend({
         template:JST['module/filter'],
@@ -441,7 +458,7 @@ Backbone.View.Filter = Backbone.View
     });
 
 
-Backbone.View.FilterDate = Backbone.View.extend(TiragSales.Views.init).extend({
+Backbone.ViewFilterDate = Backbone.View.extend(TiragSales.Views.init).extend({
     monthNames : ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
     dayNamesMin:  ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     template : JST['module/filter_date'],
@@ -499,7 +516,7 @@ Backbone.View.FilterDate = Backbone.View.extend(TiragSales.Views.init).extend({
 
 });
 
-Backbone.View.Checked = Backbone.View.extend(TiragSales.Views.init).extend({
+Backbone.ViewChecked = Backbone.View.extend(TiragSales.Views.init).extend({
     events: {
         "click .js-btn-info": 'checked'
     },
@@ -592,146 +609,7 @@ Backbone.View.Checked = Backbone.View.extend(TiragSales.Views.init).extend({
     }
 });
 
-
-Backbone.View.AddItem = Backbone.View.extend({
-
-    events: {
-        "click .js-add-button": 'add',
-        "click .js-minus-button": 'addClose',
-        "click .js-save-add": 'save'
-    },
-    flag: [],
-    initialize: function() {
-        this.collection.on("sync", this.sync,this);
-        this.collection.on("error", this.error,this);
-    },
-    add: function(a){
-        this.display_add(null,a);
-        return false;
-    },
-
-    display_add  : function(error,a){    //отображение формы ввода с ошибками или без
-        var name={inn: 'Инн', kpp : 'Кпп', name : 'Название' }
-        if(error!=null){
-            var form=this.$('form','.js-add')
-            $('.error',form).remove()
-            _.each(error,function(val,key){
-                _.each(_.uniq(val),function(value){
-                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
-                },this)
-            },this)
-
-        }else{
-            this.$('.js-add-button').addClass('hidden');
-            this.$('.js-minus-button').removeClass('hidden');
-            this.$('.js-add').slideDown("slow");
-            $()
-        }
-    },
-
-    addClose: function(a){
-        $("input",".js-add").val('');
-        this.$('.js-add').slideUp("slow");
-        this.$('.js-add-button').removeClass('hidden');
-        this.$('.js-minus-button').addClass('hidden');
-        return false;
-    },
-
-    sync: function(a,b,c){
-        this.addClose();
-        this.block('save',true);
-    },
-    error: function(a,b,c){
-        // alert(34)
-    },
-    block: function(param,bool){  //флаг на блокирование параметра
-        if(bool!=undefined)
-            this.flag[param]=bool;
-        else
-            return this.flag[param];
-    },
-
-
-
-    save: function(){
-        var form=this.$('.js-add')
-        var data={};
-        $('input',form).add('textarea',form).each(function(){
-            var $this=$(this);
-            data[$this.attr('name')]=$this.val();
-        })
-        this.block('save',false)
-        var $this = this;
-        this.collection.create(data)
-
-
-
-        return false;
-    }
-
-
-})
-
-
-Backbone.View.Modal = Backbone.View.extend({
-    template:JST['sales/modalWindow/index_form'],
-    $currentTarget:'',
-    initialize:function () {
-
-    },
-    events:{
-        'data':'initShow',
-        'click .ok':'submit'
-
-    },
-    submit:function () {
-        var $this,
-            license={};
-        this.$('form').find('input, textarea').each(function (i) {
-            $this = $(this);
-            license[$this.attr('name')] = $this.val();
-        })
-        var self=this;
-        $.ajax({
-            dataType:'json',
-            data : license,
-            url:"/api/sales/licenses/"+license.id+"/convert_to_multiple",
-            type :'POST',
-            success : $.proxy(function (data) {
-                this.trigger('click')
-                self.options.api.reloadPage();
-            }, this.$currentTarget),
-            error : $.proxy(function (a,b,c) {
-                var error = eval('('+a.responseText+')')
-                self.showError(error)
-
-            }, this.$currentTarget)
-        });
-
-    },
-    showError : function(error){
-        var  name ={multiple_count : 'Ошибка'};
-        if(error!=null){
-            var form=this.$('form')
-            $('.error',form).remove()
-            _.each(error,function(val,key){
-                _.each(_.uniq(val),function(value){
-                    name[key]
-                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
-                },this)
-            },this)
-
-        }
-    },
-    initShow:function (e, $current) {
-        this.$currentTarget = $($current);
-        this.$('.modal-body').html(this.template($($current).data('modal')))
-    }
-})
-
-
-
-Backbone.View.FormToJson = Backbone.View.extend({
+Backbone.ViewFormToJson = Backbone.View.extend({
     events: {
         //"click a" : "selectMenu"
     },
@@ -1002,3 +880,160 @@ Backbone.View.FormToJson = Backbone.View.extend({
         return obj;
     }
 });
+
+
+Backbone.ViewAddItem = Backbone.View.extend({
+
+    events: {
+        "click .js-add-button": 'add',
+        "click .js-minus-button": 'addClose',
+        "click .js-save-add": 'save'
+    },
+    flag: [],
+    initialize: function() {
+        this.collection.on("sync", this.sync,this);
+        this.collection.on("error", this.error,this);
+    },
+    add: function(a){
+        this.display_add(null,a);
+        return false;
+    },
+
+    display_add  : function(error,a){    //отображение формы ввода с ошибками или без
+        var name={inn: 'Инн', kpp : 'Кпп', name : 'Название' }
+        if(error!=null){
+            var form=this.$('form','.js-add')
+            $('.error',form).remove()
+            _.each(error,function(val,key){
+                _.each(_.uniq(val),function(value){
+                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
+                },this)
+            },this)
+
+        }else{
+            this.$('.js-add-button').addClass('hidden');
+            this.$('.js-minus-button').removeClass('hidden');
+            this.$('.js-add').slideDown("slow");
+            $()
+        }
+    },
+
+    addClose: function(a){
+        $("input",".js-add").val('');
+        this.$('.js-add').slideUp("slow");
+        this.$('.js-add-button').removeClass('hidden');
+        this.$('.js-minus-button').addClass('hidden');
+        return false;
+    },
+
+    sync: function(a,b,c){
+        this.addClose();
+        this.block('save',true);
+    },
+    error: function(a,b,c){
+    },
+    block: function(param,bool){  //флаг на блокирование параметра
+        if(bool!=undefined)
+            this.flag[param]=bool;
+        else
+            return this.flag[param];
+    },
+
+
+
+    save: function(){
+        var form=this.$('.js-add')
+        var data={};
+        $('input',form).add('textarea',form).each(function(){
+            var $this=$(this);
+            data[$this.attr('name')]=$this.val();
+        })
+        this.block('save',false)
+        var $this = this;
+        this.collection.create(data)
+
+
+
+        return false;
+    }
+
+
+})
+
+
+Backbone.ViewModal = Backbone.View.extend({
+    template:JST['module/modal'],
+    template_body :_.template(''),
+    $currentTarget:'',
+    initialize:function (options) {
+      this.template_body=options.template || this.template_body;
+      this.collection.on('showModal',this.showModal,this);
+      this.render();
+    },
+    render:function () {
+        var item = this.options.model || {};
+        var template = $(this.template({data:item}))
+        this.copyAttr(template, this.$el)
+        this.$el.html(template.html())
+        return this;
+    },
+    copyAttr:function (from, to) {
+        var attributes = from.get(0).attributes
+        var attr = {};
+        _.each(attributes, function (item) {
+            attr[item.nodeName] = item.value;
+        }, this)
+        to.attr(attr)
+    },
+
+    events:{
+        'click .ok':'save'
+    },
+    save:function () {
+        var form=this.$('form'),
+        data={},
+            model = this.currentModel;
+        $('input',form).add('textarea',form).each(function(){
+            var $this=$(this);
+            data[$this.attr('name')]=$this.val();
+        })
+        $('input:checked',form).each(function(){
+            data.elem[$(this).attr('name')]=$(this).val();
+        });
+        var url= model['url_for_update'] ? $.proxy(model['url_for_update_'+name],model) : $.proxy(model.url,model);
+        model.save(data,{url : url('modal')})
+
+
+
+    },
+    success : function (data) {
+        this.trigger('click')
+        this.$el.modal('close')
+    },
+    error : function (a,b,c) {
+        var error = eval('('+a.responseText+')')
+        this.showError(error)
+
+    },
+    showError : function(error){
+        var  name ={multiple_count : 'Ошибка'};
+        if(error!=null){
+            var form=this.$('form')
+            $('.error',form).remove()
+            _.each(error,function(val,key){
+                _.each(_.uniq(val),function(value){
+                    name[key]
+                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
+                },this)
+            },this)
+
+        }
+    },
+    showModal:function (model) {
+        this.currentModel=model;
+        this.$('.modal-body').html(this.template_body({data : model.toJSON()[model.nameModel],model :this.model}))
+        this.$el.modal('show')
+    }
+})
+
+

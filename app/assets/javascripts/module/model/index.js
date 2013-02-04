@@ -16,5 +16,11 @@ Backbone.ModelBasic = Backbone.Model.extend({
             }
         }
         return this.collection[name][id];
+    },
+    toJSON: function(){
+        var hasWithRoot={};
+        hasWithRoot[this.nameModel]=this.attributes;
+        return _.clone(hasWithRoot);
     }
+
 });

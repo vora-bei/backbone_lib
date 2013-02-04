@@ -16,6 +16,30 @@ TiragSales.Views.Users = Backbone.ViewList.extend({
         })
 });
 
+TiragSales.Views.UsersWithModal = Backbone.ViewList.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        events : {
+            'click' : 'showModal'
+        },
+        showModal : function(){
+             this.model.collection.trigger('showModal',this.model)
+        },
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+
 TiragSales.Views.UsersWithDelete = Backbone.ViewListWithDelete.extend({
     initialize:function () {
         this.proto();

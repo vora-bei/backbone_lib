@@ -12,7 +12,6 @@ Backbone.CollectionBasic = Backbone.Collection.extend({
     },
 
 
-    category : '',
     initialize: function(models,options){
         this.filter= {};
         if((options!=undefined)&&(options.url!=undefined))
