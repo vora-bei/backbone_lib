@@ -929,8 +929,7 @@ Backbone.ViewModal = Backbone.View.extend({
 
     },
     sync : function (data) {
-        this.trigger('click')
-        this.$el.modal('close')
+        this.$el.modal('hide')
     },
     error : function (a,b,c) {
         var error = eval('('+a.responseText+')')
