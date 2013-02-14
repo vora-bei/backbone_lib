@@ -411,7 +411,6 @@ BackList.Views.ListWithSelect = Backbone.View
  * Компоненты управления списком
  * */
 
-
 BackList.Views.Filter = Backbone.View
     .extend(BackList.Mixins.init)
     .extend({
@@ -462,7 +461,6 @@ BackList.Views.Filter = Backbone.View
 
 
     });
-
 
 BackList.Views.FilterDate = Backbone.View.extend(BackList.Mixins.init).extend({
     monthNames : ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
@@ -1057,8 +1055,6 @@ BackList.Views.AddItem = Backbone.View.extend({
 
 })
 
-
-
 /*@constructor
 * Конструктор модели списка самого общего вида для данного приложения
 * */
@@ -1112,8 +1108,6 @@ BackList.Models.Basic = Backbone.Model.extend({
     }
 
 });
-
-
 
 //@constructor
 BackList.Collections.Basic = Backbone.Collection.extend({

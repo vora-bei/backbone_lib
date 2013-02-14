@@ -380,11 +380,11 @@ $(function(){
             $(function(){
                 var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
                 new TiragSales.Views.UsersWithModal({el: $('#list_11').get(0), collection : collection})
-                new Backbone.ViewFilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
-                new Backbone.ViewFilter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
-                new Backbone.ViewChecked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
-                new Backbone.ViewModal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
-                new Backbone.ViewAddItem({el: $('#item_15').get(0),model : {title : "Количество"},template:JST['users/add_item_body'], collection: collection})
+                new BackList.Views.FilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
+                new BackList.Views.Filter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
+                new BackList.Views.Checked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+                new BackList.Views.Modal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
+                new BackList.Views.AddItem({el: $('#item_15').get(0),model : {title : "Количество"},template:JST['users/add_item_body'], collection: collection})
 
 
             })

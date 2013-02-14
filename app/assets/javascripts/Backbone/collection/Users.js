@@ -1,3 +1,3 @@
-TiragSales.Collections.Users = Backbone.CollectionBasic.extend({
+TiragSales.Collections.Users = BackList.Collections.Basic.extend({
     model : TiragSales.Models.User
 })

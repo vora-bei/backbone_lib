@@ -1,4 +1,4 @@
-TiragSales.Models.User = Backbone.ModelBasic.extend({
+TiragSales.Models.User = BackList.Models.Basic.extend({
     nameModel:'user',
     /*
     url_for_delete : function(){

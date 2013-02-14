@@ -1,4 +1,5 @@
-TiragSales.Views.Users = Backbone.ViewList.extend({
+
+TiragSales.Views.Users = BackList.Views.List.extend({
     initialize:function () {
         this.proto();
     },
@@ -6,7 +7,7 @@ TiragSales.Views.Users = Backbone.ViewList.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
             template:JST['users/item'],
             template_not_item:JST['users/not_item'],
             tagName:"tr",
@@ -16,7 +17,7 @@ TiragSales.Views.Users = Backbone.ViewList.extend({
         })
 });
 
-TiragSales.Views.UsersWithModal = Backbone.ViewList.extend({
+TiragSales.Views.UsersWithModal = BackList.Views.List.extend({
     initialize:function () {
         this.proto();
     },
@@ -24,7 +25,7 @@ TiragSales.Views.UsersWithModal = Backbone.ViewList.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
         template:JST['users/item'],
         template_not_item:JST['users/not_item'],
         tagName:"tr",
@@ -40,7 +41,7 @@ TiragSales.Views.UsersWithModal = Backbone.ViewList.extend({
     })
 });
 
-TiragSales.Views.UsersWithDelete = Backbone.ViewListWithDelete.extend({
+TiragSales.Views.UsersWithDelete = BackList.Views.ListWithDelete.extend({
     initialize:function () {
         this.proto();
     },
@@ -48,7 +49,7 @@ TiragSales.Views.UsersWithDelete = Backbone.ViewListWithDelete.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
         template:JST['users/item_with_delete'],
         template_not_item:JST['users/not_item'],
         tagName:"tr",
@@ -58,7 +59,7 @@ TiragSales.Views.UsersWithDelete = Backbone.ViewListWithDelete.extend({
     })
 });
 
-TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
+TiragSales.Views.UsersWithEdit = BackList.Views.ListWithEdit.extend({
     initialize:function () {
         this.proto();
     },
@@ -66,7 +67,7 @@ TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
         template:JST['users/item_with_edit'],
         template_not_item:JST['users/not_item'],
         tagName:"tr",
@@ -76,7 +77,7 @@ TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
     })
 });
 
-TiragSales.Views.UsersWithDrop = Backbone.ViewListWithDrop.extend({
+TiragSales.Views.UsersWithDrop = BackList.Views.ListWithDrop.extend({
     initialize:function () {
         this.proto();
     },
@@ -84,7 +85,7 @@ TiragSales.Views.UsersWithDrop = Backbone.ViewListWithDrop.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
         template:JST['users/item_with_drop'],
         template_not_item:JST['users/not_item'],
         tagName:"tr",
@@ -93,7 +94,7 @@ TiragSales.Views.UsersWithDrop = Backbone.ViewListWithDrop.extend({
         }
     })
 });
-TiragSales.Views.UsersWithDrag = Backbone.ViewListWithDrag.extend({
+TiragSales.Views.UsersWithDrag = BackList.Views.ListWithDrag.extend({
     initialize:function () {
         this.proto();
     },
@@ -101,7 +102,7 @@ TiragSales.Views.UsersWithDrag = Backbone.ViewListWithDrag.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
         template:JST['users/item_with_drag'],
         template_not_item:JST['users/not_item'],
         tagName:"tr",
@@ -111,7 +112,7 @@ TiragSales.Views.UsersWithDrag = Backbone.ViewListWithDrag.extend({
     })
 });
 
-TiragSales.Views.UsersWithSelect = Backbone.ViewListWithSelect.extend({
+TiragSales.Views.UsersWithSelect = BackList.Views.ListWithSelect.extend({
     initialize:function () {
         this.proto();
     },
@@ -119,7 +120,7 @@ TiragSales.Views.UsersWithSelect = Backbone.ViewListWithSelect.extend({
         this._render(this.$el, this.collection, this._item, 'list');
         return this;
     },
-    _item:Backbone.ViewItem.extend({
+    _item:BackList.Views.Item.extend({
         template:JST['users/item_with_select'],
         template_not_item:JST['users/not_item'],
         tagName:"tr",
