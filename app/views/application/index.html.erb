@@ -32,48 +32,8 @@
     </div>
     <div class="span9">
     <%=render 'partial_0'%>
-      <%=render 'partial_1'%>
-      <section id="mixin2">
-        <div class="page-header">
-          <h1>Удаляемые</h1>
-        </div>
-        <h3>Объявление</h3>
-        <pre>
-TiragSales.Views.Users = Backbone.ViewList.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-            template:JST['users/item'],
-            template_not_item:JST['users/not_item'],
-            tagName:"tr",
-            initialize:function (options) {
-                this.proto(options);
-            }
-        })
-});
-
-        </pre>
-        <h3>Вызов</h3>
-        <pre>
-$(function(){
-        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-        new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
-        })
-        </pre>
-        <script type="text/javascript">
-        $(function(){
-        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-        new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
-        })
-        </script>
-        <h3>Пример</h3>
-        <table class="table-bordered table" id="list_2"></table>
-      </section>
+    <%=render 'partial_1'%>
+    <%=render 'partial_2'%>
       <section id="mixin3">
         <div class="page-header">
           <h1>Drag and Drop</h1>

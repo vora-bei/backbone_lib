@@ -1,0 +1,73 @@
+<section id="mixin2">
+  <div class="page-header">
+    <h1>Удаляемые</h1>
+  </div>
+  <h3>Объявление</h3>
+        <pre>
+TiragSales.Views.Users = BackList.Views.List.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:BackList.ViewItem.extend({
+            template:JST['users/item'],
+            template_not_item:JST['users/not_item'],
+            tagName:"tr",
+            initialize:function (options) {
+                this.proto(options);
+            }
+        })
+});
+
+        </pre>
+  <h3>Вызов</h3>
+        <pre>
+          var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+          new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
+        </pre>
+  <script type="text/javascript">
+      $(function(){
+          var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+          new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
+      })
+  </script>
+  <h3>Пример</h3>
+  <table class="table-bordered table" id="list_2"></table>
+  <h3>Миксин удаления</h3>
+  <pre>
+
+    BackList.Mixins.list_with_delete = {
+        _initialize:function (options) {
+            this.extend_in('_item', BackList.Mixins.item_with_delete)
+            //добавляет функциональность к элементу списка при его инициализации
+        }
+    }
+    BackList.Mixins.item_with_delete = {//Миксин элемента с удалением
+    _initialize:function () {
+        this.model.on('remove', this.lazy_remove, this);// подпись на событие удаления
+    },
+
+    events:{
+        "click .js-delete":'delete' //обработка клика на кнопку с классом js-delete
+    },
+
+    lazy_remove:function () { // скрытие удаленного элемента из коллекции
+        this.$el.slideUp('slow');
+        this.$el.html('');
+        this.self.render()//this.self- передаваемая ссылка на класс отображения коллекции
+    },
+
+    delete:function () {   // метод для запуска удаления элемента из коллекции
+        if(this.model['url_for_delete'])
+            var url= $.proxy(this.model['url_for_delete'],this.model);
+        url ? this.model.destroy({url :url('item_with_delete')}) : this.model.destroy() ;
+        this.model = null;
+        return false;
+    }
+
+}
+  </pre>
+</section>
