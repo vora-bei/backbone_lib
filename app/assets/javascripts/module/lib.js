@@ -114,18 +114,18 @@ BackList.Mixins.item_with_showModal = {
 }
 BackList.Mixins.drag_item = {
     events: {
-        'save_to' : 'save_to'
+        'save_to' : 'save_to'//событие генерируемое отображением дроп-списка
     },
-    save_to :function(a,other_list){
+    save_to :function(a,other_list){// метод удаляет из коллекции элемент
         if(_.isEmpty(this.model.nameModel)){
             console.log(' свойство nameModel модели должно быть определено');
             return false
         }
 
         var model=this.model.toJSON()[this.model.nameModel]
-        model[this.model.nameModel+'_id']=model.id;
+        model[this.model.nameModel+'_id']=model.id;//юобаляет в хеш свойство с id  модели и именем   nameModel+'_id'
         delete model.id;
-        $(other_list).trigger('save-from',model);
+        $(other_list).trigger('save-from',model);//тригерит событие в  drop список и передает туда данные модели
         this.remove();
     },
 
@@ -229,10 +229,10 @@ BackList.Mixins.list_with_drag = {
 }
 BackList.Mixins.list_with_drop = {
     events: {
-        'save-from' : 'save_from'
+        'save-from' : 'save_from'// обрабатывает событие генерируемое drag  модулем
     },
 
-    sortable: function(options){
+    sortable: function(options){ // перемещение элемента
         this.$el.sortable({
             items: options.items || 'tr',
             cancel :'.not_draggable',
@@ -242,8 +242,9 @@ BackList.Mixins.list_with_drop = {
         });
     },
 
-    save_from : function(a,model){
-        if(this.collection['url_create'])
+    save_from : function(a,model){ // сохраняет перемещенный элемент на сервере
+        if(this.collection['url_create']) //проверяет наличие спец метода колекции
+                                        // если нет его то делает сохранение по базовому урл
             var url=$.proxy(this.collection['url_create'],this.collection)
         else
             var url=$.proxy(this.collection.url,this.collection);
