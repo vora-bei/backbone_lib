@@ -535,15 +535,17 @@ BackList.Views.Checked = Backbone.View.extend(BackList.Mixins.init).extend({
     init_options: function(){
         var is_has=false
         var model=this.options.model;
+        var active_item;
         model.type = model.type || 'checkbox';
         model.items = model.items || [];
 
-        if (model.type === 'radio') {
+        if (model.type === 'radiobox') {
             model.items = _.map(model.items,
                 function (val) {
                     if (val.active){
                         if(!is_has){
                             is_has=true;
+                            active_item=val.value;
                         }else{
                             val.active=false
                         }
@@ -552,11 +554,24 @@ BackList.Views.Checked = Backbone.View.extend(BackList.Mixins.init).extend({
                 }, this);
             if(!is_has&&model.items.length!=0){
                 model.items[0].active=true
+                active_item=model.items[0].value;
             }
+            this.collection.setFilter(model.name,active_item);
+
+        }else{
+            var data={};
+            data[model.name]=[]
+            _.each(model.items,function(val){
+              if (val.active){
+                  data[model.name].push(val.value)
+              }
+            },this)
+            this.collection.setFilter(model.name,data[model.name]);
         }
+
     },
     checked: function(a){
-        if(this.options.model.type=='radio')
+        if(this.options.model.type=='radiobox')
             return this.checked_radio(a);
         else
             this.checked_checkbox(a);
