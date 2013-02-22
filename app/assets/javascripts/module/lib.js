@@ -413,25 +413,30 @@ BackList.Views.ListWithSelect = Backbone.View
  * */
 
 BackList.Views.Filter = Backbone.View
-    .extend(BackList.Mixins.init)
+    .extend(BackList.Mixins.init)//миксин модуля наследования
     .extend({
-        template:JST['module/filter'],
-        timer:0,
+        template:JST['module/filter'],// шаблон
+        timer:0,// переменная таймера
         events:{
-            "keyup .js-filter":'filter',
-            "click .js-button-click":'Timer'
+            "keyup .js-filter":'filter',// навесил обработчик ввода
+            "click .js-button-click":'Timer'// клик на кнопку немедленног запроса
         },
         initialize:function (options) {
             this.proto();
             this.render();
+
+
         },
         render:function () {
+            this.collection.setFilter(this.model.name,this.model.value)// установка в коллекцию фильтра
             var item = this.options.model || {};
             var template = $(this.template({data:item}))
             this.copyAttr(template, this.$el)
-            this.$el.html(template.html())
+            this.$el.html(template.html()) //здесь уже отрисован шаблон на странице
             return this;
         },
+        // метод копирования атрибутов с корня элемента шаблона
+        // на элемент страницы на которую он встраивается
         copyAttr:function (from, to) {
             var attributes = from.get(0).attributes
             var attr = {};
@@ -440,11 +445,15 @@ BackList.Views.Filter = Backbone.View
             }, this)
             to.attr(attr)
         },
-
+//принудительная отправка запроска к серверу
+// сбрасывается таймер
         Timer:function () {
             this.collection.fetch();
             clearTimeout(this.timer)
         },
+//обработка на нажатие клавиш
+//ставит таймер если следующее нажатие менее чем за 0.5 сек то предыдущий
+// сбрасывается и ставиться новый
         filter:function (a) {
             var val = this.$('.js-filter');
             this.collection.setFilter(val.attr('name'),val.val());
@@ -488,6 +497,7 @@ BackList.Views.FilterDate = Backbone.View.extend(BackList.Mixins.init).extend({
         to.attr(attr)
     },
     initialize : function() {
+        this.collection.setFilter(this.model.name,this.model.value)// установка в коллекцию фильтра
         this.render();
         this.$(".js-filter").datepicker({
             dateFormat:'dd.mm.yy',

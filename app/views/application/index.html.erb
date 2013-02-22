@@ -73,21 +73,101 @@
       </section>
       <section id="mixin9">
         <div class="page-header">
-          <h1>Button groups</h1>
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-          sdfgsd
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
+          <h1>Живой поиск</h1>
         </div>
+
+
+        <h3>Класс живого поиска</h3>
+  <pre>
+  BackList.Views.Filter = Backbone.View
+    .extend(BackList.Mixins.init)//миксин модуля наследования
+    .extend({
+        template:JST['module/filter'],// шаблон
+        timer:0,// переменная таймера
+        events:{
+            "keyup .js-filter":'filter',// навесил обработчик ввода
+            "click .js-button-click":'Timer'// клик на кнопку немедленног запроса
+        },
+        initialize:function (options) {
+            this.proto();
+            this.render();
+
+        },
+        render:function () {
+            this.collection.setFilter(this.model.name,this.model.value)// установка в коллекцию фильтра
+            var item = this.options.model || {};
+            var template = $(this.template({data:item}))
+            this.copyAttr(template, this.$el)
+            this.$el.html(template.html()) //здесь уже отрисован шаблон на странице
+            return this;
+        },
+        // метод копирования атрибутов с корня элемента шаблона
+        // на элемент страницы на которую он встраивается
+        copyAttr:function (from, to) {
+            var attributes = from.get(0).attributes
+            var attr = {};
+            _.each(attributes, function (item) {
+                attr[item.nodeName] = item.value;
+            }, this)
+            to.attr(attr)
+        },
+//принудительная отправка запроска к серверу
+// сбрасывается таймер
+        Timer:function () {
+            this.collection.fetch();
+            clearTimeout(this.timer)
+        },
+//обработка на нажатие клавиш
+//ставит таймер если следующее нажатие менее чем за 0.5 сек то предыдущий
+// сбрасывается и ставиться новый
+        filter:function (a) {
+            var val = this.$('.js-filter');
+            this.collection.setFilter(val.attr('name'),val.val());
+            var $context = this;
+            clearTimeout(this.timer)
+            this.timer = setTimeout(function () {
+                $context.Timer()
+            }, 500)
+            if (val.val().length >= 6 || val.val().length == 0) {
+
+                this.collection.fetch();
+                clearTimeout(this.timer)
+            }
+        }
+
+
+    });
+  </pre>
+
+
+        <h3>Вызов</h3>
+        <pre>
+var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+new BackList.Views.Filter({el: $('#item_21').get(0),model: {name:'filter2',value:'123'}, collection: collection})
+new TiragSales.Views.Users({el: $('#list_13').get(0), collection : collection})
+new BackList.Views.Filter({el: $('#item_22').get(0),model: {name:'filter1',value:''}, collection: collection});
+        </pre>
+        <script type="text/javascript">
+            $(function(){
+                var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+                new TiragSales.Views.Users({el: $('#list_13').get(0), collection : collection})
+                new BackList.Views.Filter({el: $('#item_21').get(0),model: {name:'filter2',value:'123'}, collection: collection})
+                new BackList.Views.Filter({el: $('#item_22').get(0),model: {name:'filter1',value:''}, collection: collection});
+
+
+            })
+
+        </script>
+        <h3>Пример</h3>
+        <div id="item_21"></div>
+        <div id="item_22"></div>
+        <table class="table-bordered table" id="list_13">
+
+        </table>
       </section>
       <section id="mixin10">
         <div class="page-header">
-            <h1>Выбор</h1>
+            <h1>Выбор категории</h1>
           </div>
           <h3>Вызов</h3>
         <pre>
@@ -126,20 +206,22 @@
 
         <h3>Вызов</h3>
         <pre>
-$(function(){
-   var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-   new TiragSales.Views.UsersWithSelect({el: $('#list_11').get(0), collection : collection})
-   new Backbone.View.FilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
-           })</pre>
+  var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+  new TiragSales.Views.UsersWithModal({el: $('#list_11').get(0), collection : collection})
+  new BackList.Views.FilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
+  new BackList.Views.FilterDate({el: $('#item_12').get(0),model: {name:'date_from',value:''}, collection: collection})
+  new BackList.Views.Modal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
+  new BackList.Views.FilterDate({el: $('#item_13').get(0),model: {name:'date',value:'29.01.2013'},template:JST['users/add_item_body'], collection: collection})
+
+        </pre>
         <script type="text/javascript">
             $(function(){
                 var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
                 new TiragSales.Views.UsersWithModal({el: $('#list_11').get(0), collection : collection})
                 new BackList.Views.FilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
-                new BackList.Views.Filter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
-                new BackList.Views.Checked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+                new BackList.Views.FilterDate({el: $('#item_12').get(0),model: {name:'date_from',value:''}, collection: collection})
                 new BackList.Views.Modal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
-                new BackList.Views.AddItem({el: $('#item_15').get(0),model : {title : "Количество"},template:JST['users/add_item_body'], collection: collection})
+                new BackList.Views.FilterDate({el: $('#item_13').get(0),model: {name:'date',value:'29.01.2013'},template:JST['users/add_item_body'], collection: collection})
 
 
             })
@@ -149,8 +231,6 @@ $(function(){
         <div id="item_11"></div>
         <div id="item_12"></div>
         <div id="item_13"></div>
-        <div id="item_14"></div>
-        <div id="item_15"></div>
         <table class="table-bordered table" id="list_11">
 
         </table>
