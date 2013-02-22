@@ -1,4 +1,4 @@
-TiragSales.Models.User = Backbone.ModelBasic.extend({
+TiragSales.Models.User = BackList.Models.Basic.extend({
     nameModel:'user',
     /*
     url_for_delete : function(){
@@ -12,6 +12,12 @@ TiragSales.Models.User = Backbone.ModelBasic.extend({
      url_for_update_email() для апдейта параметра email
     },
     */
+    url_for_update_name: function(){
+        return 'users_name/1'
+    },
+    url_for_update_title: function(){
+        return 'users/1'
+    },
     url:function() {
         var base = _.result(this, 'urlRoot') || _.result(this.collection, 'url') || urlError();
         if (this.isNew()) return base;

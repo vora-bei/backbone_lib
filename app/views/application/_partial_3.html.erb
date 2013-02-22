@@ -1,0 +1,164 @@
+<section id="mixin3">
+  <div class="page-header">
+    <h1>Drag and Drop</h1>
+    <h3>Объявление Drop</h3>
+        <pre>
+TiragSales.Views.UsersWithDrop = BackList.Views.ListWithDrop.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.Views.Item.extend({
+        template:JST['users/item_with_drop'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+        </pre>
+
+    <h3>Объявление Drag</h3>
+        <pre>
+
+TiragSales.Views.UsersWithDrag = BackList.Views.ListWithDrag.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.Views.Item.extend({
+        template:JST['users/item_with_drag'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+
+        </pre>
+
+    <h3>Вызов Drop</h3>
+        <pre>
+            var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+            new TiragSales.Views.UsersWithDrop({el: $('#list_4').get(0), collection : collection})
+        </pre>
+
+    <h3>Миксин Drop</h3>
+  <pre>
+       BackList.Mixins.list_with_drop = {
+    events: {
+        'save-from' : 'save_from'// обрабатывает событие генерируемое drag  модулем
+    },
+
+    sortable: function(options){ // перемещение элемента
+        this.$el.sortable({
+            items: options.items || 'tr',
+            cancel :'.not_draggable',
+            receive: function(event, ui){
+                ui.item.trigger('save_to',this)
+            }
+        });
+    },
+
+    save_from : function(a,model){ // сохраняет перемещенный элемент на сервере
+        if(this.collection['url_create']) //проверяет наличие спец метода колекции
+                                        // если нет его то делает сохранение по базовому урл
+            var url=$.proxy(this.collection['url_create'],this.collection)
+        else
+            var url=$.proxy(this.collection.url,this.collection);
+        this.collection.create(model,{at: 0, url : url('item_with_drop')});
+    },
+
+    _initialize: function(options) {
+        this.sortable(options);
+
+    }
+
+}
+  </pre>
+
+    <h3>Вызов Drag</h3>
+        <pre>
+            var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+            new TiragSales.Views.UsersWithDrag({connectWith : "#list_4" ,el: $('#list_5').get(0), collection : collection})
+        </pre>
+    <h3>Миксин Drag</h3>
+  <pre>
+
+   BackList.Mixins.list_with_drag = {
+
+
+    sortable:function(options){
+        this.$el.sortable({
+            connectWith: options.connectWith || ".js-list",
+            appendTo: 'body',
+            helper: 'clone',
+            items: options.items || 'tr',
+            cancel :'.not_draggable'
+        });
+    },
+
+
+
+    _initialize: function(options) {
+        this.sortable(options); //настраивает перемещаемость элемента
+                                //методом jquery.ui
+        if(options.drag_item){   //наледование встроенного класа элемента списка
+            this[options.drag_item]=this[property].extend(BackList.Mixins.drag_item)
+        }else{
+            this['_item']=this['_item'].extend(BackList.Mixins.drag_item)
+        }
+
+    }
+
+}
+
+   BackList.Mixins.drag_item = {
+    events: {
+        'save_to' : 'save_to'//событие генерируемое отображением дроп-списка
+    },
+    save_to :function(a,other_list){// метод удаляет из коллекции элемент
+        if(_.isEmpty(this.model.nameModel)){
+            console.log(' свойство nameModel модели должно быть определено');
+            return false
+        }
+
+        var model=this.model.toJSON()[this.model.nameModel]
+        model[this.model.nameModel+'_id']=model.id;//добаляет в хеш свойство с id  модели
+                                                   //и именем   nameModel+'_id'
+        delete model.id;
+        $(other_list).trigger('save-from',model);//тригерит событие в  drop список
+                                                 //и передает туда данные модели
+        this.remove();
+    },
+
+    _initialize: function(options) {
+    }
+
+}
+  </pre>
+
+    <script type="text/javascript">
+        $(function(){
+            var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+            new TiragSales.Views.UsersWithDrop({el: $('#list_4').get(0), collection : collection})
+        })
+        $(function(){
+            var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+            new TiragSales.Views.UsersWithDrag({connectWith : "#list_4" ,el: $('#list_5').get(0), collection : collection})
+        })
+    </script>
+    <h3>Пример Drop</h3>
+    <table class="table-bordered table" id="list_4"></table>
+    <h3>Пример Drag</h3>
+    <table class="table-bordered table" id="list_5"></table>
+  </div>
+</section>

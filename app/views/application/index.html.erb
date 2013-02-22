@@ -1,42 +1,6 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar" type="button">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="./index.html" class="brand">Bootstrap</a>
-      <div class="nav-collapse collapse">
-        <ul class="nav">
-          <li class="">
-            <a href="./index.html">Home</a>
-          </li>
-          <li class="">
-            <a href="./getting-started.html">Get started</a>
-          </li>
-          <li class="">
-            <a href="./scaffolding.html">Scaffolding</a>
-          </li>
-          <li class="">
-            <a href="./base-css.html">Base CSS</a>
-          </li>
-          <li class="active">
-            <a href="./components.html">Components</a>
-          </li>
-          <li class="">
-            <a href="./javascript.html">JavaScript</a>
-          </li>
-          <li class="">
-            <a href="./application/test">Тестирование</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<header id="overview" class="jumbotron subhead">
+
+<header id="overview" class="subhead">
   <div class="container">
     <h1>Backbone list lib</h1>
     <p class="lead">Библиотека пользовательских компонент для для фреймворка Backbone.</p>
@@ -67,277 +31,12 @@
       </ul>
     </div>
     <div class="span9">
-      <section id="about">
-        <div class="page-header">
-          <h1>О проекте</h1>
-        </div>
-        <p>Данная библиотека была разработана для работы со списками. Она реализована на  основе  современного
-        web-инструментария  Backbone.js , Underscore.js, Jquery.js, JQuery.UI.js,
-        Twitter.bootstrap.js
-        <p>
-      </section>
-      <section id="base">
-        <div class="page-header">
-          <h1>Базовый список</h1>
-        </div>
-        <p>Список – элемент интерфейса базовый для вкладок, на которых требуется
-          отображение большого количества однотипной информации. Списки наследуется
-          от Backbone.View и при инициализации получают ссылку на экземпляр класса
-          Backbone.Collection и на экземпляр класса Backbone.View_item (класс
-          представления элемента списка). Списки строятся на основе информации с сервера,
-          переданной в json формате. Внешний вид элементов списка получается с
-          помощью шаблона элемента списка. Данные сервера сохраняются в классе,
-          наследуемом от Backbone.Collection.
-        </p>
-        <h3>Объявление</h3>
-        <pre>
-TiragSales.Views.Users = Backbone.ViewList.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-            template:JST['users/item'],
-            template_not_item:JST['users/not_item'],
-            tagName:"tr",
-            initialize:function (options) {
-                this.proto(options);
-            }
-        })
-});
-
-        </pre>
-        <h3>Вызов</h3>
-        <pre>
- $(function(){
-                var collection = new TiragSales.Collections.Users([{name : 'Kita'},{name : 'Kita'},{name : 'Kita'}],{url : 'users'})
-                new TiragSales.Views.Users({el: $('#list_1').get(0), collection : collection})
-            })
-        </pre>
-
-        <script type="text/javascript">
-            $(function(){
-                var collection = new TiragSales.Collections.Users([{name : 'Kita'},{name : 'Kita'},{name : 'Kita'}],{url : 'users'})
-                new TiragSales.Views.Users({el: $('#list_1').get(0), collection : collection})
-            })
-
-        </script>
-        <h3>Пример</h3>
-        <table class="table table-bordered" id="list_1">
-
-        </table>
-      </section>
-      <section id="mixin2">
-        <div class="page-header">
-          <h1>Удаляемые</h1>
-        </div>
-        <h3>Объявление</h3>
-        <pre>
-TiragSales.Views.Users = Backbone.ViewList.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-            template:JST['users/item'],
-            template_not_item:JST['users/not_item'],
-            tagName:"tr",
-            initialize:function (options) {
-                this.proto(options);
-            }
-        })
-});
-
-        </pre>
-        <h3>Вызов</h3>
-        <pre>
-$(function(){
-        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-        new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
-        })
-        </pre>
-        <script type="text/javascript">
-        $(function(){
-        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-        new TiragSales.Views.UsersWithDelete({el: $('#list_2').get(0), collection : collection})
-        })
-        </script>
-        <h3>Пример</h3>
-        <table class="table-bordered table" id="list_2"></table>
-      </section>
-      <section id="mixin3">
-        <div class="page-header">
-          <h1>Drag and Drop</h1>
-          <h3>Объявление Drop</h3>
-        <pre>
-TiragSales.Views.UsersWithDrop = Backbone.ViewListWithDrop.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-        template:JST['users/item_with_drop'],
-        template_not_item:JST['users/not_item'],
-        tagName:"tr",
-        initialize:function (options) {
-            this.proto(options);
-        }
-    })
-});
-        </pre>
-
-          <h3>Объявление Drag</h3>
-        <pre>
-
-TiragSales.Views.UsersWithDrag = Backbone.ViewListWithDrag.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-        template:JST['users/item_with_drag'],
-        template_not_item:JST['users/not_item'],
-        tagName:"tr",
-        initialize:function (options) {
-            this.proto(options);
-        }
-    })
-});
-
-        </pre>
-
-          <h3>Вызов Drop</h3>
-        <pre>
-$(function(){
-        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-        new TiragSales.Views.UsersWithDrop({el: $('#list_4').get(0), collection : collection})
-        })
-        </pre>
-
-          <h3>Вызов Drag</h3>
-        <pre>
-$(function(){
-        var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-        new TiragSales.Views.UsersWithDrag({el: $('#list_4').get(0), collection : collection})
-        })
-        </pre>
-
-          <script type="text/javascript">
-              $(function(){
-                  var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-                  new TiragSales.Views.UsersWithDrop({el: $('#list_4').get(0), collection : collection})
-              })
-              $(function(){
-                  var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-                  new TiragSales.Views.UsersWithDrag({connectWith : "#list_4" ,el: $('#list_5').get(0), collection : collection})
-              })
-          </script>
-          <h3>Пример Drop</h3>
-          <table class="table-bordered table" id="list_4"></table>
-          <h3>Пример Drag</h3>
-          <table class="table-bordered table" id="list_5"></table>
-        </div>
-      </section>
-      <section id="mixin5">
-        <div class="page-header">
-          <h1>Редактируемые</h1>
-        </div>
-        <h3>Объявление</h3>
-        <pre>
-TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-        template:JST['users/item_with_edit'],
-        template_not_item:JST['users/not_item'],
-        tagName:"tr",
-        initialize:function (options) {
-            this.proto(options);
-        }
-    })
-});
-        </pre>
-        <h3>Вызов</h3>
-        <pre>
-        $(function(){
-             var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-             new TiragSales.Views.UsersWithEdit({el: $('#list_3').get(0), collection : collection})
-        })
-        </pre>
-        <script type="text/javascript">
-            $(function(){
-                var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-                new TiragSales.Views.UsersWithEdit({el: $('#list_3').get(0), collection : collection})
-            })
-
-        </script>
-        <h3>Пример</h3>
-        <table class="table-bordered table" id="list_3">
-
-        </table>
-      </section>
-      <section id="mixin8">
-        <div class="page-header">
-          <h1>Выбор действия</h1>
-
-        </div>
-        <h3>Объявление</h3>
-        <pre>
-TiragSales.Views.UsersWithSelect = Backbone.ViewListWithEdit.extend({
-    initialize:function () {
-        this.proto();
-    },
-    render:function () {
-        this._render(this.$el, this.collection, this._item, 'list');
-        return this;
-    },
-    _item:Backbone.ViewItem.extend({
-        template:JST['users/item_with_edit'],
-        template_not_item:JST['users/not_item'],
-        tagName:"tr",
-        initialize:function (options) {
-            this.proto(options);
-        }
-    })
-});
-        </pre>
-        <h3>Вызов</h3>
-        <pre>
-        $(function(){
-             var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-             new TiragSales.Views.UsersWithSelect({el: $('#list_6').get(0), collection : collection})
-        })
-        </pre>
-        <script type="text/javascript">
-            $(function(){
-                var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
-                new TiragSales.Views.UsersWithSelect({el: $('#list_6').get(0), collection : collection})
-            })
-
-        </script>
-        <h3>Пример</h3>
-        <table class="table-bordered table" id="list_6">
-
-        </table>
-
-      </section>
+    <%=render 'partial_0'%>
+    <%=render 'partial_1'%>
+    <%=render 'partial_2'%>
+    <%=render 'partial_3'%>
+    <%=render 'partial_4'%>
+    <%=render 'partial_5'%>
       <section id="mixin6">
         <div class="page-header">
           <h1>Button groups</h1>
@@ -388,17 +87,37 @@ TiragSales.Views.UsersWithSelect = Backbone.ViewListWithEdit.extend({
       </section>
       <section id="mixin10">
         <div class="page-header">
-          <h1>Button groups</h1>
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-          sdfgsd
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-        </div>
+            <h1>Выбор</h1>
+          </div>
+          <h3>Вызов</h3>
+        <pre>
+    var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+    new TiragSales.Views.Users({el: $('#list_1').get(0), collection : collection})
+    new BackList.Views.Checked({el: $('#item_16').get(0),model:{type: 'checkbox',name:'filter1', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+    new BackList.Views.Checked({el: $('#item_17').get(0),model:{type: 'radiobox',name:'filter2', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+    new BackList.Views.Checked({el: $('#item_18').get(0),model:{type: 'checkbox',name:'filter3', items: [{value:'1',title:'1'},{value:'2',title:'2'},{value:'3',active: true,title:'3'}]}, collection: collection})
+        </pre>
+          <script type="text/javascript">
+              $(function(){
+                  var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+                  new TiragSales.Views.Users({el: $('#list_12').get(0), collection : collection})
+                  new BackList.Views.Checked({el: $('#item_16').get(0),model:{type: 'checkbox',name:'filter1', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+                  new BackList.Views.Checked({el: $('#item_17').get(0),model:{type: 'radiobox',name:'filter2', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+                  new BackList.Views.Checked({el: $('#item_18').get(0),model:{type: 'checkbox',name:'filter3', items: [{value:'1',active: true,title:'1'},{value:'2',title:'2'},{value:'3',active: true,title:'3'}]}, collection: collection})
+
+
+              })
+
+          </script>
+          <h3>Пример</h3>
+          <div id="item_16"></div>
+          <div id="item_17"></div>
+          <div id="item_18"></div>
+          <div id="item_19"></div>
+          <div id="item_20"></div>
+          <table class="table-bordered table" id="list_12">
+
+          </table>
       </section>
       <section id="mixin11">
         <div class="page-header">
@@ -416,11 +135,11 @@ $(function(){
             $(function(){
                 var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
                 new TiragSales.Views.UsersWithModal({el: $('#list_11').get(0), collection : collection})
-                new Backbone.ViewFilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
-                new Backbone.ViewFilter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
-                new Backbone.ViewChecked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
-                new Backbone.ViewModal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
-                new Backbone.ViewAddItem({el: $('#item_15').get(0),model : {title : "Количество"},template:JST['users/add_item_body'], collection: collection})
+                new BackList.Views.FilterDate({el: $('#item_11').get(0),model: {name:'date_to',value:''}, collection: collection})
+                new BackList.Views.Filter({el: $('#item_12').get(0),model: {name:'filter',value:''}, collection: collection})
+                new BackList.Views.Checked({el: $('#item_13').get(0),model:{type: 'checkbox',name:'filter', items: [{value:'1',title:'1'},{value:'2',title:'2'}]}, collection: collection})
+                new BackList.Views.Modal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
+                new BackList.Views.AddItem({el: $('#item_15').get(0),model : {title : "Количество"},template:JST['users/add_item_body'], collection: collection})
 
 
             })

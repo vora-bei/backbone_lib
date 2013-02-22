@@ -1,0 +1,61 @@
+<section id="base">
+  <div class="page-header">
+    <h1>Базовый список</h1>
+  </div>
+  <p>Список – элемент интерфейса базовый для вкладок, на которых требуется
+    отображение большого количества однотипной информации. Списки наследуется
+    от Backbone.ViewList и при инициализации получают ссылку на экземпляр класса
+    отнаследованного от BackList.Collections.Basic и на экземпляр класса BackList.Views.Item
+    (класс представления элемента списка). Списки строятся на основе информации с сервера,
+    переданной в json формате. Внешний вид элементов списка получается с
+    помощью шаблона элемента списка. Данные сервера сохраняются в классе,
+    наследуемом от BackList.Collections.Basic
+  </p>
+  <h3>Объявление</h3>
+        <pre>
+TiragSales.Views.Users = BackList.Views.List.extend({
+    initialize:function () {
+        this.proto(); //Запускает механизм наследования миксинов,
+                      //объединяет хеш events  и запускает все  _initialize()
+    },
+    render:function () { //Класс отрисовки
+        this._render(this.$el, this.collection, this._item, 'list');
+          //запускает отрисовку списка передается корневой элемент списка,
+          //коллекция по которой рисуется, и класс с помощью которого рисуется
+        return this;// обязательно
+    },
+    _item:BackList.Views.Item.extend({
+            template:JST['users/item'],//шаблон элемента
+            template_not_item:JST['users/not_item'],// шаблон пустого элемента
+            tagName:"tr",  // элемент оборачивания
+            initialize:function (options) {
+                this.proto(options); //Запускает механизм наследования миксинов,
+                      //объединяет хеш events  и запускает все  _initialize()
+            }
+        })
+});
+
+        </pre>
+  <h3>Вызов</h3>
+        <pre>
+          var collection = new TiragSales.Collections.Users([
+                                                                {name : 'Kita'},
+                                                                {name : 'Kita'},
+                                                                {name : 'Kita'}
+                                                            ],
+                                                            {url : 'users'})
+          new TiragSales.Views.Users({el: $('#list_1').get(0), collection : collection})
+        </pre>
+
+  <script type="text/javascript">
+      $(function(){
+          var collection = new TiragSales.Collections.Users([{name : 'Kita'},{name : 'Kita'},{name : 'Kita'}],{url : 'users'})
+          new TiragSales.Views.Users({el: $('#list_1').get(0), collection : collection})
+      })
+
+  </script>
+  <h3>Пример</h3>
+  <table class="table table-bordered" id="list_1">
+
+  </table>
+</section>

@@ -1,4 +1,4 @@
-<div class="btn-group js-checked" name=<%=data.name%> data-toggle="<%=data.type=='radio' ? 'buttons-radio' : 'buttons-checkbox' %>">
+<div class="btn-group js-checked" name=<%=data.name%> data-toggle="<%=data.type=='radiobox' ? 'buttons-radio' : 'buttons-checkbox' %>">
     <%_.each(data.items,function(item){%>
       <button value="<%=item.value%>"  class="btn js-btn-info btn-info <%=item.active ? 'active': ''%>"><%=item.title%></button>
     <%});%>

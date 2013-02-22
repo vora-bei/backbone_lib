@@ -1,0 +1,43 @@
+<section id="mixin5">
+  <div class="page-header">
+    <h1>Редактируемые</h1>
+  </div>
+  <h3>Объявление</h3>
+        <pre>
+TiragSales.Views.UsersWithEdit = Backbone.ViewListWithEdit.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:Backbone.ViewItem.extend({
+        template:JST['users/item_with_edit'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+        </pre>
+  <h3>Вызов</h3>
+        <pre>
+        $(function(){
+             var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+             new TiragSales.Views.UsersWithEdit({el: $('#list_3').get(0), collection : collection})
+        })
+        </pre>
+  <script type="text/javascript">
+      $(function(){
+          var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+          new TiragSales.Views.UsersWithEdit({el: $('#list_3').get(0), collection : collection})
+      })
+
+  </script>
+  <h3>Пример</h3>
+  <table class="table-bordered table" id="list_3">
+
+  </table>
+</section>

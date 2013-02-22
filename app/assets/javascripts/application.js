@@ -19,13 +19,17 @@
 //= require_tree ./Backbone/model
 //= require_tree ./Backbone/collection
 //= require_tree ./Backbone/view
-//= require_tree ./Backbone/route
 // side bar
 
-var $window = $(window)
-$('.bs-docs-sidenav').affix({
-    offset: {
-        top: function () { return $window.width() <= 980 ? 290 : 210 },
-        bottom: 270
-    }
+$(function () {
+    var $window = $(window)
+    setTimeout(function () {
+        $('.bs-docs-sidenav').affix({
+            offset: {
+                top: function () {
+                    return $window.width() <= 980 ? 250 : 170
+                }, bottom: 270
+            }
+        })
+    }, 100)
 })
