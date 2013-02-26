@@ -1,25 +1,4 @@
-<div class="payment_dogovor margin_bottom_18  pagination-centered">
-    <h4 class="pagination-centered">Договор № <%=data.number%><%if(!data.is_done){%><button type="button" class="close  js-delete" data-dismiss="alert">×</button><%}%></h4>
-
-
- <table class="table table-bordered js-contract-line">
-
-    <thead>
-    <tr>
-            <th>Товар</th>
-          <th>Стоимость</th>
-          <th>Кол-во</th>
-          <th>НДС</th>
-          <th>Сумма</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-    <tfoot>
-    <tr>
-      <td colspan="4">Общая сумма</td>
-           <td><%=data.final_price%></td>
-    </tr>
-    </tfoot>
-   </table>
-
+<tr>
+    <td><%=data.name%></td>
+    <td class='js-list-in'></td>
+</tr>

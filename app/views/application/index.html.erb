@@ -39,17 +39,123 @@
     <%=render 'partial_5'%>
       <section id="mixin6">
         <div class="page-header">
-          <h1>Button groups</h1>
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-          sdfgsd
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
+          <h1>Подсписки</h1>
         </div>
+          <h3>Объявление представления</h3>
+        В данном примере объявляется простой список с подсписками, причем вложенный список обладает функциональностью
+        редактирования значения полей
+        <pre>
+TiragSales.Views.UsersWithRelational=
+    Backbone.View
+    .extend(BackList.Mixins.list)
+    .extend(BackList.Mixins.init)
+    .extend({
+        initialize: function(options){
+            this.proto(options);
+        },
+        render: function() {
+            this._render(this.$el, this.collection,this._item,'list');
+            return this;
+        },
+
+        _item : Backbone.View  //обращаем внимание элемент списка обладает функциональностью
+                               // списка
+            .extend(BackList.Mixins.init)
+            .extend(BackList.Mixins.item)
+            .extend(BackList.Mixins.list)
+            .extend({
+                template: JST['users/item_with_relational'],
+                template_not_item: JST['users/not_item'],
+                tagName:  "tr",
+                c_line : [],
+                initialize: function(options){
+                    this.proto(options)
+                    if(this.model!=null){
+                        var phones=this.model.get_relational('phones');// здесь у нас функция для взятия подсписка
+                        phones.on('reset', this.render, this)// она возвращает коллекцию
+                               .on("sync", this.render, this);
+                    }
+                },
+                render: function() {
+
+                    if(this.model!=null){
+                        var phones=this.model.get_relational('phones')
+                        this._render_item(); // отрисовка элемента списка
+                        this._render('.js-list-in',phones,this._item,'c_line');// отрисовка подсписка
+                    }
+                    return this;
+                },
+
+                _item : Backbone.View
+                    .extend(BackList.Mixins.init)
+                    .extend(BackList.Mixins.item)
+                    .extend(BackList.Mixins.edit_item)// функциональность редактирования
+                    .extend({
+                        template: JST['users/item_with_relational_phones'],
+                        template_not_item: JST['users/not_item'],
+                        tagName:  "div",
+
+                        initialize: function(options){
+                            this.proto(options);
+                        }
+                    })
+
+            })
+
+    });
+        </pre>
+
+          <h3>Объявление Коллекции</h3>
+        <pre>
+
+TiragSales.Collections.UsersWithRelational = BackList.Collections.Basic.extend({
+    model : TiragSales.Models.UserWithRelational
+})
+          </pre>
+          <h3>Объявление Модели</h3>
+        <pre>
+TiragSales.Models.UserWithRelational = BackList.Models.Basic.extend({
+    nameModel: 'user',
+    _phones: BackList.Collections.Basic.extend({ // коллекция подсписка, ищется по имени атрибута с подсписком
+        model: BackList.Models.Basic.extend({
+            nameModel: 'phone',
+            url_for_update_phone: function(id){
+                return 'phones'+'/'+this.id
+            }
+        })
+    })
+})
+})
+
+
+        </pre>
+
+          <h3>Вызов</h3>
+        <pre>
+var collection = new TiragSales.Collections.UsersWithRelational([
+          {id:1,name : 'Kita1', phones: [{id :36,phone :1231223}, {id :31,phone :11723123}, {id :33,phone :136323123}]},
+          {id:2,name : 'Kita2' , phones: [{id :311,phone :123123}, {id :3123,phone :1283123}, {id :32123,phone :1239123}]},
+          {id:3,name : 'Kita3', phones: [{phone :123123}]}],
+          {url : 'users'})
+          new TiragSales.Views.UsersWithRelational({el: $('#list_56').get(0), collection : collection})
+        </pre>
+
+
+
+
+          <script type="text/javascript">
+              $(function(){
+                  var collection = new TiragSales.Collections.UsersWithRelational([
+                                                                {id:1,name : 'Kita1', phones: [{id :36,phone :1231223}, {id :31,phone :11723123}, {id :33,phone :136323123}]},
+                                                                {id:2,name : 'Kita2' , phones: [{id :311,phone :123123}, {id :3123,phone :1283123}, {id :32123,phone :1239123}]},
+                                                                {id:3,name : 'Kita3', phones: [{phone :123123}]}],
+                                                            {url : 'users'})
+                  new TiragSales.Views.UsersWithRelational({el: $('#list_56').get(0), collection : collection})
+              })
+          </script>
+          <h3>Пример подсписка</h3>
+          <table class="table-bordered table" id="list_56"></table>
+
       </section>
       <section id="mixin">
         <div class="page-header">

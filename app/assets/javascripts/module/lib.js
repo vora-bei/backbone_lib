@@ -166,8 +166,8 @@ BackList.Mixins.edit_item={
 BackList.Mixins.list= {
 
     _initialize:function (options) {
-        this.collection.on('reset', this.render, this)
-            .on("sync", this.render, this);
+        this.collection && this.collection.on('reset', this.render, this)
+                        .on("sync", this.render, this);
     },
 
     list : [],
@@ -325,8 +325,7 @@ BackList.Mixins.list_with_relational = Backbone.View
                     if(this.model!=null){
                         var contract_lines=this.model.get_relational('contract_lines')
                         this._render_item();
-                        this._render('.js-contract-line',contract_lines,this._item,'paym_assign');
-                        this.status();
+                        this._render('.js-list',contract_lines,this._item,'c_line');
                     }
                     return this;
                 },
@@ -1131,6 +1130,12 @@ BackList.Models.Basic = Backbone.Model.extend({
         var hasWithRoot={};
         hasWithRoot[this.nameModel]=this.attributes;
         return _.clone(hasWithRoot);
+    },
+    url:function() {
+        var base = _.result(this, 'urlRoot') || _.result(this.collection, 'url') || urlError();
+        if (this.isNew()) return base;
+        base=base.split('?')[0];
+        return base + (base.charAt(base.length - 1) === '/' ? '' : '/') + encodeURIComponent(this.id);
     }
 
 });

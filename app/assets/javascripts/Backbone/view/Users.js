@@ -129,192 +129,61 @@ TiragSales.Views.UsersWithSelect = BackList.Views.ListWithSelect.extend({
         }
     })
 });
- /*
-TiragSales.Views.Drag_Users=TiragSales.Views.Users
-    .extend(TiragSales.Views.drag_list_with_item).extend({
-        initialize: function(options) {
-            this.proto(options);
-            this.extend_in('_item',{template:JST['sales/adm/user/drag_item']})
-            this.collection.on('reset', this.render, this)
-                .on("sync", this.render,this)
-                .fetch();
-        }
-    })
-TiragSales.Views.Drop_Users=TiragSales.Views.Users
-    .extend(TiragSales.Views.drop_list)
-    .extend(TiragSales.Views.list_with_delete_item).extend({
-        _initialize: function(options) {this.extend_in('_item',{template:JST['sales/adm/user/drop_item']})}
-    })
 
-
-//____________________________________________________________________
-
-
-TiragSales.Views.SalesTeam = Backbone.View.extend({
-    initialize: function() {
-        this.proto();
-        this.collection.on('reset', this.render, this);
-        this.collection.on("sync", this.render,this);
-        this.collection.fetch();
-    },
-    render: function() {
-        this._render('.js-list',this.collection,this._item,'list');
-        return this;
-    },
-
-    _item:Backbone.View
-        .extend(TiragSales.Views.item)
-        .extend(TiragSales.Views.init)
-        .extend({
-            events : {},
-            template:JST['sales/adm/sales_group/item'],
-            template_not_item:JST['sales/adm/sales_group/not_item'],
-            tagName:"tr",
-
-            initialize:function (options) {
-                this.proto(options);
-                this.model.on("sync", this.render,this);
-            }
-
-        })
-
-
-});
-_.extend(TiragSales.Views.SalesTeam.prototype,TiragSales.Views.list);
-_.extend(TiragSales.Views.SalesTeam.prototype,TiragSales.Views.init);
-
-//____________________________________________________________________
-TiragSales.Views.Groups = Backbone.View.extend(TiragSales.Views.list)
-                                       .extend(TiragSales.Views.init)
-                                       .extend({
-    initialize: function(options) {
-        this.proto(options);
-        this.collection.on('reset', this.render, this);
-        this.collection.on("sync", this.render,this);
-        this.collection.fetch();
-    },
-    render: function() {
-        this._render('.js-list',this.collection,this._item,'list');
-        return this;
-    },
-
-    _item:Backbone.View
-        .extend(TiragSales.Views.item)
-        .extend(TiragSales.Views.init)
-        .extend({
-
-            template:JST['sales/adm/group/item'],
-            template_not_item:JST['sales/adm/group/not_item'],
-            tagName:"tr",
-
-            initialize:function (options) {
-                this.proto(options);
-                this.model.on("sync", this.render,this);
-            }
-
-        })
-
-});
-
-
-TiragSales.Views.Drag_Groups=TiragSales.Views.Groups
-        .extend(TiragSales.Views.drag_list_with_item).extend({
-        initialize: function(options) {
-            this.proto(options);
-            this.extend_in('_item',{template:JST['sales/adm/group/drag_item']})
-            this.collection.on('reset', this.render, this)
-                .on("sync", this.render,this)
-                    .fetch();
-        }
-})
-TiragSales.Views.Drop_Groups=TiragSales.Views.Groups
-    .extend(TiragSales.Views.drop_list)
-    .extend(TiragSales.Views.list_with_delete_item)
-
-TiragSales.Views.Groups_Add_Delete=TiragSales.Views.Groups
-    .extend(TiragSales.Views.list_with_delete_item).extend({
-        _initialize: function(options) {
-            this.extend_in('_item',{
-                _initialize: function(){
-
-                },
-                events :{'click  a.js-open' : 'active'},
-                active :function(event){
-                    var $elem=this.find_or_create('a.js-hidden','<a class="js-hidden" style="display: none;"></a>')
-                    var $current=$(event.currentTarget)
-                    $elem.attr('href',$current.attr('data-href')).attr('title',$current.attr('title'));
-                    $elem.trigger('click');
-                    return true;
-                },
-                find_or_create : function(selector,item){
-                    var elem=this.$(selector);
-                    if(elem.length==0)
-                        elem=$(item).appendTo(this.$el)
-                    return elem;
-                }
-
-            })
-        }
-    }).extend({
-    _initialize: function(options) {
-        this.extend_in('_item',{template:JST['sales/adm/group/main_item']})
-    }
-})
-
-
-
-//____________________________________________________________________
-TiragSales.Views.Permissions = Backbone.View.extend(TiragSales.Views.list)
-    .extend(TiragSales.Views.init)
+TiragSales.Views.UsersWithRelational=
+    Backbone.View
+    .extend(BackList.Mixins.list)
+    .extend(BackList.Mixins.init)
     .extend({
-        initialize: function(options) {
+        initialize: function(options){
             this.proto(options);
-            this.collection.on('reset', this.render, this);
-            this.collection.on("sync", this.render,this);
-            this.collection.fetch();
         },
         render: function() {
-            this._render('.js-list',this.collection,this._item,'list');
+            this._render(this.$el, this.collection,this._item,'list');
             return this;
         },
 
-        _item:Backbone.View
-            .extend(TiragSales.Views.item)
-            .extend(TiragSales.Views.init)
+        _item : Backbone.View
+            .extend(BackList.Mixins.init)
+            .extend(BackList.Mixins.item)
+            .extend(BackList.Mixins.list)
             .extend({
+                template: JST['users/item_with_relational'],
+                template_not_item: JST['users/not_item'],
+                tagName:  "tr",
+                c_line : [],
+                initialize: function(options){
+                    this.proto(options)
+                    if(this.model!=null){
+                        var phones=this.model.get_relational('phones')
+                        phones.on('reset', this.render, this)
+                               .on("sync", this.render, this);
+                    }
+                },
+                render: function() {
 
-                template:JST['sales/adm/permission/item'],
-                template_not_item:JST['sales/adm/permission/not_item'],
-                tagName:"tr",
+                    if(this.model!=null){
+                        var phones=this.model.get_relational('phones')
+                        this._render_item();
+                        this._render('.js-list-in',phones,this._item,'c_line');
+                    }
+                    return this;
+                },
 
-                initialize:function (options) {
-                    this.proto(options);
-                    this.model.on("sync", this.render,this);
-                }
+                _item : Backbone.View
+                    .extend(BackList.Mixins.init)
+                    .extend(BackList.Mixins.item)
+                    .extend(BackList.Mixins.edit_item)
+                    .extend({
+                        template: JST['users/item_with_relational_phones'],
+                        template_not_item: JST['users/not_item'],
+                        tagName:  "div",
+
+                        initialize: function(options){
+                            this.proto(options);
+                        }
+                    })
 
             })
 
     });
-
-
-TiragSales.Views.Drag_Permissions=TiragSales.Views.Permissions
-    .extend(TiragSales.Views.drag_list_with_item).extend({
-        initialize: function(options) {
-            this.proto(options);
-            this.extend_in('_item',{template:JST['sales/adm/permission/drag_item']})
-            this.collection.on('reset', this.render, this)
-                .on("sync", this.render,this)
-                .fetch();
-        }
-    })
-TiragSales.Views.Drop_Permissions=TiragSales.Views.Permissions
-    .extend(TiragSales.Views.drop_list)
-    .extend(TiragSales.Views.list_with_delete_item)
-
-//TiragSales.Views.Permissions_Add_Delete=TiragSales.Views.Permissions
-//    .extend(TiragSales.Views.list_with_delete_item).extend({
-//        _initialize: function(options) {
-//            this.extend_in('_item',{template:JST['sales/adm/permission/main_item']})
-//        }
-//    })
-*/
