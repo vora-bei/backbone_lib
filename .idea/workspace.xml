@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ffb447c5-07f8-46a8-bc2d-ff3f8e28afc3" name="Default" comment="">
-      <change type="DELETED" beforePath="D:\project\backbone_lib\.idea\inspectionProfiles\.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\project\backbone_lib\.idea\inspectionProfiles\Project_Default.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\project\backbone_lib\.idea\inspectionProfiles\profiles_settings.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.rakeTasks" afterPath="$PROJECT_DIR$/.idea/.rakeTasks" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/javascripts/Backbone/model/User.js" afterPath="$PROJECT_DIR$/app/assets/javascripts/Backbone/model/User.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/backbone_lib.iml" afterPath="$PROJECT_DIR$/.idea/backbone_lib.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="backbone_lib.iws" />
@@ -16,7 +9,7 @@
     <ignored path=".idea/.generators" />
     <ignored path=".idea/dataSources.ids" />
     <ignored path=".idea/dataSources.xml" />
-    <file path="/Dummy.txt" changelist="ffb447c5-07f8-46a8-bc2d-ff3f8e28afc3" time="1361869135646" ignored="false" />
+    <file path="/Dummy.txt" changelist="ffb447c5-07f8-46a8-bc2d-ff3f8e28afc3" time="1361869172333" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +26,22 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name=".rakeTasks" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name=".rakeTasks" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/.rakeTasks">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="111" selection-start="325" selection-end="325" vertical-scroll-proportion="0.21875">
+            <state line="7" column="15" selection-start="325" selection-end="325" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="jquery.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/vendor/assets/javascripts/jquery.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3810" column="4" selection-start="106392" selection-end="106392" vertical-scroll-proportion="0.1393597">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,6 +60,13 @@
   <component name="GitLogSettings">
     <option name="myDateState">
       <MyDateState />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/vendor/assets/javascripts/jquery.js" />
+      </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
@@ -107,6 +118,60 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vendor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vendor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backbone_lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vendor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javascripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -322,14 +387,19 @@
       <created>1361868976747</created>
       <updated>1361868976747</updated>
     </task>
+    <task id="LOCAL-00001" summary="LOl">
+      <created>1361869183509</created>
+      <updated>1361869183509</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="10" y="10" width="1260" height="984" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32941177" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32941177" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -407,8 +477,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/.rakeTasks">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="111" selection-start="325" selection-end="325" vertical-scroll-proportion="0.21875">
+        <state line="7" column="15" selection-start="325" selection-end="325" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/assets/javascripts/jquery.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3810" column="4" selection-start="106392" selection-end="106392" vertical-scroll-proportion="0.1393597">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
