@@ -59,6 +59,27 @@ TiragSales.Views.UsersWithDelete = BackList.Views.ListWithDelete.extend({
     })
 });
 
+TiragSales.Views.UsersWithDeleteAndEdit = BackList.Views.List
+                                        .extend(BackList.Mixins.list_with_delete)
+                                        .extend(BackList.Mixins.list_with_edit)
+                                        .extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:BackList.Views.Item.extend({
+        template:JST['users/item_with_all'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+
 TiragSales.Views.UsersWithEdit = BackList.Views.ListWithEdit.extend({
     initialize:function () {
         this.proto();

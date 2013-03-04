@@ -911,12 +911,12 @@ BackList.Views.FormToJson = Backbone.View.extend({
 });
 
 BackList.Views.Modal = Backbone.View.extend({
-    template:JST['module/modal'],
-    template_body :_.template(''),
+    template:JST['module/modal'],//два темплейта для окантовки
+    template_body :_.template(''),// и для тела модалного темплейта
     $currentTarget:'',
     initialize:function (options) {
-        this.template_body=options.template || this.template_body;
-        this.collection.on('showModal',this.showModal,this)
+        this.template_body=options.template || this.template_body;// здесь передается тело
+        this.collection.on('showModal',this.showModal,this)//подписаться на событие коллекции
             .on("sync", this.sync,this)
             .on("error", this.error,this);
         this.render();
@@ -940,7 +940,7 @@ BackList.Views.Modal = Backbone.View.extend({
     events:{
         'click .ok':'save'
     },
-    save:function () {
+    save:function () {//сохранение модели на сервере
         var form=this.$('form'),
             data={},
             model = this.currentModel;
@@ -958,7 +958,8 @@ BackList.Views.Modal = Backbone.View.extend({
 
     },
     sync : function (data) {
-        this.$el.modal('hide')
+        this.$el.modal('hide');
+        this.$('.error').remove();
     },
     error : function (a,b,c) {
         var error = eval('('+a.responseText+')')
@@ -979,10 +980,13 @@ BackList.Views.Modal = Backbone.View.extend({
 
         }
     },
+    // обработчик события {showModal} коллекции, с данным событием
+    // передается и выбранная  модель из коллекции
     showModal:function (model) {
-        this.currentModel=model;
+        this.currentModel=model;//запомнить текущую модель
+        //отрисовать внутренность модального окна с учетом данных модели
         this.$('.modal-body').html(this.template_body({data : model.toJSON()[model.nameModel],model :this.model}))
-        this.$el.modal('show')
+        this.$el.modal('show')//показать модальное окно, это функция из твиттера бутстрапа
     }
 })
 
@@ -1040,8 +1044,11 @@ BackList.Views.AddItem = Backbone.View.extend({
         }
     },
 
-    addClose: function(a){
+    addClose: function(){
         this.$('.js-add').slideUp("slow");
+        this.$('.error').remove()
+        this.$("input").not("[type='checkbox']").val('');
+        this.$('input:checked').removeAttr('checked');
         this.$('.js-add-button').removeClass('hidden');
         this.$('.js-minus-button').addClass('hidden');
         return false;

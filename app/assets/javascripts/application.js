@@ -28,7 +28,7 @@ $(function () {
             offset: {
                 top: function () {
                     return $window.width() <= 980 ? 250 : 170
-                }, bottom: 270
+                }, bottom: 200
             }
         })
     }, 100)

@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" />
 
 <header id="overview" class="subhead">
   <div class="container">
@@ -26,7 +27,8 @@
         <li><a href="#mixin9">Живой поиск<i class="icon-chevron-right"></i></a></li>
         <li><a href="#mixin10">Переключатель<i class="icon-chevron-right"></i></a></li>
         <li><a href="#mixin11">Datapicker<i class="icon-chevron-right"></i></a></li>
-        <li><a href="#mixin12">Добавление<i class="icon-chevron-right"></i></a></li>
+        <li><a href="#mixin12">Модальное окно<i class="icon-chevron-right"></i></a></li>
+        <li><a href="#mixin15">Добавление<i class="icon-chevron-right"></i></a></li>
         <li><a href="#mixin13">Форма ввода<i class="icon-chevron-right"></i></a></li>
       </ul>
     </div>
@@ -160,21 +162,56 @@ var collection = new TiragSales.Collections.UsersWithRelational([
       <section id="mixin">
         <div class="page-header">
           <h1>Примешивание</h1>
-
         </div>
+        <h3>Объявление</h3>
+        <pre>
+TiragSales.Views.UsersWithDeleteAndEdit = BackList.Views.List
+                                        .extend(BackList.Mixins.list_with_delete)
+                                        .extend(BackList.Mixins.list_with_edit)
+                                        .extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:BackList.Views.Item.extend({
+        template:JST['users/item_with_all'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+        </pre>
+        <h3>Вызов</h3>
+        <pre>
+          var collection = new TiragSales.Collections.Users([
+                                                                {id: 1,name : 'Kita'},
+                                                                {id: 1,name : 'Kita'},
+                                                                {id: 1,name : 'Kita'}
+                                                            ],
+                                                            {url : 'users'})
+          new TiragSales.Views.UsersWithDeleteAndEdit({el: $('#list_111').get(0), collection : collection})
+        </pre>
+
+        <script type="text/javascript">
+            $(function(){
+                var collection = new TiragSales.Collections.Users([{name : 'Kita'},{name : 'Kita'},{name : 'Kita'}],{url : 'users'})
+                new TiragSales.Views.UsersWithDeleteAndEdit({el: $('#list_111').get(0), collection : collection})
+            })
+
+        </script>
+        <h3>Пример</h3>
+        <table class="table table-bordered" id="list_111">
+
+        </table>
       </section>
       <section id="mixin7">
         <div class="page-header">
           <h1>Button groups</h1>
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-          sdfgsd
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
         </div>
       </section>
       <section id="mixin9">
@@ -343,31 +380,263 @@ new BackList.Views.Filter({el: $('#item_22').get(0),model: {name:'filter1',value
       </section>
       <section id="mixin12">
         <div class="page-header">
-          <h1>Button groups</h1>
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-          sdfgsd
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
+          <h1>Модальное окно</h1>
         </div>
+        <h3>Класс Модального окна</h3>
+        <pre>
+BackList.Views.Modal = Backbone.View.extend({
+    template:JST['module/modal'],//два темплейта для окантовки
+    template_body :_.template(''),// и для тела модального окна
+    $currentTarget:'',
+    initialize:function (options) {
+        this.template_body=options.template || this.template_body;// здесь передается тело
+        this.collection.on('showModal',this.showModal,this)//подписаться на событие коллекции
+            .on("sync", this.sync,this)
+            .on("error", this.error,this);
+        this.render();
+    },
+    render:function () {
+        var item = this.options.model || {};
+        var template = $(this.template({data:item}))
+        this.copyAttr(template, this.$el)
+        this.$el.html(template.html())
+        return this;
+    },
+    copyAttr:function (from, to) {
+        var attributes = from.get(0).attributes
+        var attr = {};
+        _.each(attributes, function (item) {
+            attr[item.nodeName] = item.value;
+        }, this)
+        to.attr(attr)
+    },
+
+    events:{
+        'click .ok':'save'
+    },
+    save:function () {//сохранение модели на сервере
+        var form=this.$('form'),
+            data={},
+            model = this.currentModel;
+        $('input',form).add('textarea',form).each(function(){
+            var $this=$(this);
+            data[$this.attr('name')]=$this.val();
+        })
+        $('input:checked',form).each(function(){
+            data.elem[$(this).attr('name')]=$(this).val();
+        });
+        var url= model['url_for_update'] ? $.proxy(model['url_for_update_'+name],model) : $.proxy(model.url,model);
+        model.save(data,{url : url('modal')})
+
+
+
+    },
+    sync : function (data) {
+        this.$el.modal('hide')
+    },
+    error : function (a,b,c) {
+        var error = eval('('+a.responseText+')')
+        this.showError(error)
+
+    },
+    showError : function(error){
+        var  name ={multiple_count : 'Ошибка'};
+        if(error!=null){
+            var form=this.$('form')
+            $('.error',form).remove()
+            _.each(error,function(val,key){
+                _.each(_.uniq(val),function(value){
+                    name[key]
+                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
+                },this)
+            },this)
+
+        }
+    },
+    // обработчик события {showModal} коллекции, с данным событием
+    // передается и выбранная  модель из коллекции
+    showModal:function (model) {
+        this.currentModel=model;//запомнить текущую модель
+        //отрисовать внутренность модального окна с учетом данных модели
+        this.$('.modal-body').html(this.template_body({data : model.toJSON()[model.nameModel],model :this.model}))
+        this.$el.modal('show')//показать модальное окно, это функция из твиттера бутстрапа
+    }
+})        </pre>
+        <h3>Пример класса модифицированного для показа Модального окна</h3>
+        <pre>
+               TiragSales.Views.UsersWithModal = BackList.Views.List.extend({
+    initialize:function () {
+        this.proto();
+    },
+    render:function () {
+        this._render(this.$el, this.collection, this._item, 'list');
+        return this;
+    },
+    _item:BackList.Views.Item.extend({
+        template:JST['users/item'],
+        template_not_item:JST['users/not_item'],
+        tagName:"tr",
+        events : {
+            'click' : 'showModal' //клик
+        },
+        showModal : function(){
+             this.model.collection.trigger('showModal',this.model)// вот что генерит событие для окна
+        },
+        initialize:function (options) {
+            this.proto(options);
+        }
+    })
+});
+        </pre>
+        <h3>Вызов</h3>
+        <pre>
+                var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+                new TiragSales.Views.UsersWithModal({el: $('#list_11').get(0), collection : collection})
+                new BackList.Views.Modal({el: $('#item_14').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
+        </pre>
+        <script type="text/javascript">
+            $(function(){
+                var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+                new TiragSales.Views.UsersWithModal({el: $('#list_19').get(0), collection : collection})
+                new BackList.Views.Modal({el: $('#item_89').get(0),model : {title : "Количество"},template:JST['users/modal'], collection: collection})
+            })
+
+        </script>
+        <h3>Пример</h3>
+        <div id="item_89"></div>
+        <table class="table-bordered table" id="list_19">
+
+        </table>
       </section>
+    <section id="mixin15">
+      <div class="page-header">
+        <h1>Добавление</h1>
+      </div>
+
+
+      <h3>Класс добавления</h3>
+  <pre>
+BackList.Views.AddItem = Backbone.View.extend({
+    template:JST['module/add_item'],
+    template_body :_.template(''),
+    events: {
+        "click .js-add-button": 'add',
+        "click .js-minus-button": 'addClose',
+        "submit form": 'save'
+    },
+    flag: [],
+    initialize: function(options) {
+        this.template_body=options.template || this.template_body;
+        this.collection.on("sync", this.sync,this)
+            .on("error", this.error,this);
+        this.render();
+    },
+    render:function () {
+        var item = this.options.model || {};
+        var template = $(this.template({data:item,template_body :this.template_body({data:item})}))
+        this.copyAttr(template, this.$el)
+        this.$el.html(template.html())
+        return this;
+    },
+    copyAttr:function (from, to) {
+        var attributes = from.get(0).attributes
+        var attr = {};
+        _.each(attributes, function (item) {
+            attr[item.nodeName] = item.value;
+        }, this)
+        to.attr(attr)
+    },
+    add: function(a){
+        this.display_add(null,a);
+        return false;
+    },
+
+    display_add  : function(error,a){    //отображение формы ввода с ошибками или без
+        var name={inn: 'Инн', kpp : 'Кпп', name : 'Название' }
+        if(error!=null){
+            var form=this.$('form')
+            $('.error',form).remove()
+            _.each(error,function(val,key){
+                _.each(_.uniq(val),function(value){
+                    form.append('<p class="error">'+ name[key]+': '+ value+'</p>')
+                },this)
+            },this)
+
+        }else{
+            this.$('.js-add-button').addClass('hidden');
+            this.$('.js-minus-button').removeClass('hidden');
+            this.$('.js-add').slideDown("slow");
+            $()
+        }
+    },
+
+    addClose: function(a){
+        this.$('.js-add').slideUp("slow");
+        this.$('.js-add-button').removeClass('hidden');
+        this.$('.js-minus-button').addClass('hidden');
+        return false;
+    },
+
+    sync: function(a,b,c){
+        this.addClose();
+        this.block('save',true);
+    },
+    error: function(a,b,c){
+    },
+    block: function(param,bool){  //флаг на блокирование параметра
+        if(bool!=undefined)
+            this.flag[param]=bool;
+        else
+            return this.flag[param];
+    },
+
+
+
+    save: function(){
+        var form=this.$('.js-add')
+        var data={};
+        $('input',form).add('textarea',form).each(function(){
+            var $this=$(this);
+            data[$this.attr('name')]=$this.val();
+        })
+        this.block('save',false)
+        this.collection.create(data)
+
+
+
+        return false;
+    }
+
+
+})
+  </pre>
+
+
+      <h3>Вызов</h3>
+        <pre>
+var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+new BackList.Views.AddItem({el: $('#item_222').get(0),template: JST['users/add_item_body'], collection: collection})
+new TiragSales.Views.Users({el: $('#list_132').get(0), collection : collection})
+        </pre>
+      <script type="text/javascript">
+          $(function(){
+              var collection = new TiragSales.Collections.Users([{id:1,name : 'Kita'},{id:2,name : 'Kita'},{id:3,name : 'Kita'}],{url : 'users'})
+              new BackList.Views.AddItem({el: $('#item_222').get(0),template: JST['users/add_item_body'], collection: collection})
+              new TiragSales.Views.Users({el: $('#list_132').get(0), collection : collection})
+          })
+
+      </script>
+      <h3>Пример</h3>
+      <div id="item_222"></div>
+      <table class="table-bordered table" id="list_132">
+
+      </table>
+    </section>
       <section id="mixin13">
         <div class="page-header">
-          <h1>Button groups</h1>
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
-          sdfgsd
-          dfvdfvfdv
-          <br>
-          edfgefdg
-          <br>
+          <h1>Форма ввода</h1>
         </div>
+        Пусть леша коментирует того монстра беее
       </section>
     </div>
   </div>
